@@ -1,17 +1,17 @@
-#ifndef CAbase
-#define CAbase
+#ifndef cabase
+#define cabase
 
-class CAbase {
+class cabase {
     private:
-    int width;
-    int height;
-    int** currentworld;
-    int** nextgenworld;
+        int width;
+        int height;
+        int** currentworld;
+        int** nextgenworld;
 
     public:
-    CAbase();
-    CAbase(int width, int height);
-    ~CAbase();
-}
+        cabase();
+        cabase(int width, int height);
+        ~cabase();
+};
 
 #endif
