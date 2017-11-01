@@ -10,6 +10,8 @@ class CAbase {
 
     public:
     CAbase();
+    CAbase(int width, int height);
+    ~CAbase();
 }
 
 #endif

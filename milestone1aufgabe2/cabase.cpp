@@ -3,33 +3,31 @@
 #define DEFAULT_WIDTH 50;
 #define DEFAULT_HEIGHT 50;
 
-class CAbase {
-    CAbase() {
-        CAbase(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    }
+CAbase::CAbase() {
+    CAbase(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+}
 
-    CAbase(width, height) {
-        CAbase::width = width;
-        CAbase::height = height;
-    }
+CAbase::CAbase(int width, int height) {
+    CAbase::width = width;
+    CAbase::height = height;
+}
 
-    ~CAbase() {
-        // empty deconstructor
-    }
+CAbase::~CAbase() {
+    // empty deconstructor
+}
 
-    setWidth(width) {
-        CAbase::width = width;
-    }
+CAbase::setWidth(int width) {
+    CAbase::width = width;
+}
 
-    getWidth() {
-        return CAbase::width;
-    }
+int CAbase::getWidth() {
+    return CAbase::width;
+}
 
-    setHeight(height) {
-        CAbase::height = height;
-    }
+CAbase::setHeight(int height) {
+    CAbase::height = height;
+}
 
-    getHeight() {
-        return CAbase::height;
-    }
+int CAbase::getHeight() {
+    return CAbase::height;
 }
