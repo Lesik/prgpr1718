@@ -1,68 +1,70 @@
 #include <iostream>
-#include <stdlib.h>
+#include <cstdlib>
 
 using namespace std;
 
-void HelloWorld () {
-    cout << "Hello World!" << endl;
-}
-
-void Drucken (int x, int y) {
-    int A1[x][y];
-
-    for (int i=0; i<=x; ++i) {
-        for (int k=0; k<=y; ++k ) {
-           A1[i][k] = (rand () % 9)+1;
-           cout << A1[i][k] << " ";
+int main() 
+{   
+    int A1[30][30];
+    
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 30; j++) {
+            A1[i][j] = rand() % 10;
+            std::cout << A1[i][j] << " ";
         }
-        cout << endl;
+        cout << "\n";
     }
-}
-
-int main()
-{
-    //HelloWorld();
-
-    int x, y; x = 30; y = 30;
-    int A1[x][y];
-    srand (time(NULL));
-
-    for (int i=0; i<=x; ++i) {
-        for (int k=0; k<=y; ++k ) {
-           A1[i][k] = (rand () % 9)+1;
-           //cout << A1[i][k] << " ";
-        }
-        //cout << endl;
-    }
-
-    int* A2 = new int [30*30];
-    int k = 0; int l = 0;
-
-    for (int i=0; i<= x*y; ++i) {
-        //cout << k << endl;
-        if (k != 0 && k % x == 0) {
-           ++l; k = 0;
-           cout << endl;
+    
+    cout << "\n";
+    
+    int k = 0;
+    int l = 0;
+    int* A2 = new int[30*30];
+    for (int i = 0; i < 30*30; i++) {
+        if (l % 30 == 0 && l != 0) {
+            k = k + 1;
+            l = 0; 
+            cout << "\n";
         }
         A2[i] = A1[k][l];
-        cout << A2[i]<< " ";
-        ++k;
+        std::cout << A2[i] << " ";
+        l = l + 1;
     }
+    
+    int end = 0;
+    int auswahl;
+    
+    do {  
+        int k = 0;
+        int l = 0;
+        cout << "\n0.Exit\n1.Change Cell\n2.Reprint\n";
+        cin >> auswahl;
 
-    bool ende = 0; int zahl;
-    do {
-       cout << "0. Exit" << endl;
-       cout << "1. Change Cell" << endl;
-       cout << "2. Reprint" << endl;
+        switch(auswahl){
 
-       cin >> zahl;
-       switch (zahl) {
-            case 0 : ende = 1; break;
-            case 1 : cout << "Zellengröße x -> "; cin >> x; cout << "y ->"; cin >> y; break;
-            case 2 : Drucken(x, y); break;
-            //default: cout << "Falsch!!!" << endl;
-            }
-        } while (ende == 0);
+            case 0:  
+                end = 1;
+                break;
+            case 1:  
+                for (int i = 0; i < 30; i++) {
+                    for (int j = 0; j < 30; j++) {
+                        A1[i][j] = rand() % 10;
+                    };
+                };
+            case 2:  
+                for (int i = 0; i < 30*30; i++) {
+                    if (l % 30 == 0 && l != 0) {
+                        k = k + 1;
+                        l = 0; 
+                        cout << "\n";
+                    }
+                    A2[i] = A1[k][l];
+                    std::cout << A2[i] << " ";
+                    l = l + 1;
+                };
+                break;
+            default: cout << "Falsche Eingabe!";
+    	}
 
-    return 0;
+    } while (end == 0);
 }
