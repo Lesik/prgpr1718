@@ -3,6 +3,8 @@
 
 class CAbase {
     private:
+    int width;
+    int height;
     int** currentworld;
     int** nextgenworld;
 
