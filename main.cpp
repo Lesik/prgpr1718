@@ -51,6 +51,7 @@ int main()
                         A1[i][j] = rand() % 10;
                     };
                 };
+                break;
             case 2:  
                 for (int i = 0; i < 30*30; i++) {
                     if (l % 30 == 0 && l != 0) {
