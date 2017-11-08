@@ -5,7 +5,7 @@ class CAbase
 {
 private:
     int Nx, Ny;                 // Menmbervariable
-    int* A1[30*30], A2[30*30];
+    int* currentworld[30*30], nextgenworld[30*30];
 
 public:
     CAbase(int x, int y); // Konstruktor

@@ -7,8 +7,8 @@ CAbase::CAbase(int x, int y) // Initialisiere Spiel
 {
     Nx = x; Ny = y;
     for (int i=0; i<x*y; i++) {
-        A1[i] = 0;
-        A2[i] = 0;
+        currentworld[i] = 0;
+        nextgenworld[i] = 0;
     }
 }
 
@@ -28,7 +28,7 @@ void CAbase::setGroese(int x, int y) // Erstellt die Größe des Feldes
 
 void CAbase::setZelle(int x, int y) // Setzt lebende Zelle auf Feld (x,y)
 {
-    *A1[x*y] = 1;
+    *currentworld[x*y] = 1;
 }
 
 int CAbase::getNx() //
@@ -43,20 +43,20 @@ int CAbase::getNy() //
 
 bool CAbase::getZelle(int x, int y) // Gibt den aktuellen Zustand von Feld (x,y)
 {
-    return A1[x*y];
+    return currentworld[x*y];
 }
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
     int AnzNachbar = 0;
-    if(*A1[(x-1)*(y-1)]==1) {AnzNachbar++;}
-    if(*A1[(x-1)*(y)]==1) {AnzNachbar++;}
-    if(*A1[(x-1)*(y+1)]==1) {AnzNachbar++;}
-    if(*A1[(x)*(y-1)]==1) {AnzNachbar++;}
-    if(*A1[(x)*(y+1)]==1) {AnzNachbar++;}
-    if(*A1[(x+1)*(y-1)]==1) {AnzNachbar++;}
-    if(*A1[(x+1)*(y)]==1) {AnzNachbar++;}
-    if(*A1[(x+1)*(y+1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x-1)*(y-1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x-1)*(y)]==1) {AnzNachbar++;}
+    if(*currentworld[(x-1)*(y+1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x)*(y-1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x)*(y+1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x+1)*(y-1)]==1) {AnzNachbar++;}
+    if(*currentworld[(x+1)*(y)]==1) {AnzNachbar++;}
+    if(*currentworld[(x+1)*(y+1)]==1) {AnzNachbar++;}
 
     return AnzNachbar;
 }
@@ -64,16 +64,16 @@ int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,
 void CAbase::regel(int x, int y) // Regel von des Spiels
 {
     if (CAbase::getZelle(x,y) == 1 && CAbase::nachbar(x,y) < 2) {
-        A2[x*y] = 0;
+        nextgenworld[x*y] = 0;
     }
     if (CAbase::nachbar(x,y) == 2 || CAbase::nachbar(x,y) == 3) {
-        A2[x*y] = 1;
+        nextgenworld[x*y] = 1;
     }
     if (CAbase::nachbar(x,y) > 3) {
-        A2[x*y] = 0;
+        nextgenworld[x*y] = 0;
     }
     if (CAbase::getZelle(x,y) == 0 && CAbase::nachbar(x,y) == 3) {
-        A2[x*y] = 1;
+        nextgenworld[x*y] = 1;
     }
 }
 
@@ -85,7 +85,7 @@ void CAbase::Print()
             if (i==0 || i==Nx-1 || k==0) {
                 cout << " . ";
             }
-            if(*A1[Nx*Ny] == 1) {
+            if(*currentworld[Nx*Ny] == 1) {
                 cout << " * ";
             }
             else {
