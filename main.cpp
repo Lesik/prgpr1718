@@ -31,7 +31,7 @@ int main()
         l = l + 1;
     }
 
-    int end = 0;
+    bool end = 0;
     int auswahl;
 
     do {
