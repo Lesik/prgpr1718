@@ -8,11 +8,11 @@ using namespace std;
 void Start(bool ende) {
     CAbase base(30, 30);
     do {
-        cout << "0. Exit" << endl;
-        cout << "1. Envolve" << endl;
-        cout << "2. Set alive cell" << endl;
-        cout << "3. Reprint" << endl;
-        cout << "4. Resize" << endl;
+        const char *functions[] = {"Exit", "Evolve", "Set alive cell", "Reprint", "Resize"};
+
+        for (int i = 0; i < 5; i++) {
+            cout << i << ". " << functions[i] << endl;
+        }
 
         int zahl, x, y;
         cin >> zahl;
@@ -23,12 +23,12 @@ void Start(bool ende) {
             case 3 : base.Print(); break;
             case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setGroese(x,y); break;
         }
-    } while (ende == 0);
+    } while (ende == false);
 }
 
 int main()
 {
-    Start(0);
+    Start(false);
     return 0;
 }
 
