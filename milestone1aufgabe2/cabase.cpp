@@ -1,33 +1,111 @@
-#include "cabase.h"
+#include <iostream>
+#include "CAbase.h"
 
-#define DEFAULT_WIDTH 50;
-#define DEFAULT_HEIGHT 50;
+using namespace std;
 
-cabase::cabase() {
-    cabase(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+CAbase::CAbase(int x, int y) // Initialisiere Spiel
+{
+    Nx = x; Ny = y;
+    for (int i=0; i<x*y; i++) {
+        A1[i] = 0;
+        A2[i] = 0;
+    }
 }
 
-cabase::cabase(int width, int height) {
-    cabase::width = width;
-    cabase::height = height;
+CAbase::~CAbase()
+{
 }
 
-cabase::~cabase() {
-    // empty deconstructor
+
+// Setter & Getter - Methoden
+
+void CAbase::setGroese(int x, int y) // Erstellt die Größe des Feldes
+{
+    Nx = x;
+    Ny = y;
 }
 
-cabase::setWidth(int width) {
-    cabase::width = width;
+void CAbase::setZelle(int x, int y) // Setzt lebende Zelle auf Feld (x,y)
+{
+    *A1[x*y] = 1;
 }
 
-int cabase::getWidth() {
-    return cabase::width;
+int CAbase::getNx() //
+{
+    return Nx;
 }
 
-cabase::setHeight(int height) {
-    cabase::height = height;
+int CAbase::getNy() //
+{
+    return Ny;
 }
 
-int cabase::getHeight() {
-    return cabase::height;
+bool CAbase::getZelle(int x, int y) // Gibt den aktuellen Zustand von Feld (x,y)
+{
+    return A1[x*y];
+}
+
+int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
+{
+    int AnzNachbar = 0;
+    if(*A1[(x-1)*(y-1)]==1) {AnzNachbar++;}
+    if(*A1[(x-1)*(y)]==1) {AnzNachbar++;}
+    if(*A1[(x-1)*(y+1)]==1) {AnzNachbar++;}
+    if(*A1[(x)*(y-1)]==1) {AnzNachbar++;}
+    if(*A1[(x)*(y+1)]==1) {AnzNachbar++;}
+    if(*A1[(x+1)*(y-1)]==1) {AnzNachbar++;}
+    if(*A1[(x+1)*(y)]==1) {AnzNachbar++;}
+    if(*A1[(x+1)*(y+1)]==1) {AnzNachbar++;}
+
+    return AnzNachbar;
+}
+
+void CAbase::regel(int x, int y) // Regel von des Spiels
+{
+    if (CAbase::getZelle(x,y) == 1 && CAbase::nachbar(x,y) < 2) {
+        A2[x*y] = 0;
+    }
+    if (CAbase::nachbar(x,y) == 2 || CAbase::nachbar(x,y) == 3) {
+        A2[x*y] = 1;
+    }
+    if (CAbase::nachbar(x,y) > 3) {
+        A2[x*y] = 0;
+    }
+    if (CAbase::getZelle(x,y) == 0 && CAbase::nachbar(x,y) == 3) {
+        A2[x*y] = 1;
+    }
+}
+
+
+void CAbase::Print()
+{
+    for (int i=0; i< Nx; i++) {
+        for (int k=0; k<Ny; k++) {
+            if (i==0 || i==Nx-1 || k==0) {
+                cout << " . ";
+            }
+            if(*A1[Nx*Ny] == 1) {
+                cout << " * ";
+            }
+            else {
+                cout << "   ";
+            }
+            if (k==Ny-1) {
+                cout << "." << endl;
+            }
+        }
+    }
+    cout << endl;
+}
+
+void CAbase::Envolve()
+{
+    for (int i=0; i<Nx; i++) {
+        for(int j=0; j<Ny; j++) {
+            CAbase::regel(i, j);
+        }
+    }
+    for (int k=0; k<Nx*Ny; k++) {
+        //*A1[k] = *A2[k];
+    }
 }
