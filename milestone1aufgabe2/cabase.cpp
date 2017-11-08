@@ -14,6 +14,7 @@ CAbase::CAbase(int x, int y) // Initialisiere Spiel
 
 CAbase::~CAbase()
 {
+    // empty deconstructor
 }
 
 

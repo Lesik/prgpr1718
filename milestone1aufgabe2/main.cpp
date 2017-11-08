@@ -5,8 +5,9 @@
 using namespace std;
 
 // Startmenü
-void Start(bool ende) {
+void Start(bool end) {
     CAbase base(30, 30);
+
     do {
         const char *functions[] = {"Exit", "Evolve", "Set alive cell", "Reprint", "Resize"};
 
@@ -17,13 +18,13 @@ void Start(bool ende) {
         int zahl, x, y;
         cin >> zahl;
         switch (zahl) {
-            case 0 : ende = 1; break;
+            case 0 : end = 1; break;
             case 1 : base.Envolve(); break;
             case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setZelle(x,y); break;
             case 3 : base.Print(); break;
             case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setGroese(x,y); break;
         }
-    } while (ende == false);
+    } while (end == false);
 }
 
 int main()
