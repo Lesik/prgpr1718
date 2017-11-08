@@ -41,7 +41,7 @@ int main()
         l = l + 1;
     }
 
-    bool end = 0;
+    bool end = false;
     int auswahl;
 
     do {
@@ -53,7 +53,7 @@ int main()
         switch(auswahl) {
 
             case 0:
-                end = 1;
+                end = true;
                 break;
             case 1:
 				// same as above, too lazy to separate into function
@@ -79,5 +79,5 @@ int main()
             default: cout << "Falsche Eingabe!";
     	}
 
-    } while (end == 0);
+    } while (end == false);
 }
