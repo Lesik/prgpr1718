@@ -4,29 +4,33 @@
 class CAbase
 {
 private:
-    int Nx, Ny;                 // Menmbervariable
-    int* currentworld[30*30], nextgenworld[30*30];
+    int worldWidth, worldHeight;                 // Menmbervariable
+    bool* currentworld;
+    bool* nextgenworld;
+    void createWorld();
+    void populateRandomly();
+    int getIndexByCoord(int x, int y);
 
 public:
     CAbase(int x, int y); // Konstruktor
     ~CAbase(); // Destruktor
 
 // Setter
-    void setGroese(int x, int y);
-    void setZelle(int x, int y);
+    void setSize(int x, int y);
+    void setCell(int x, int y, bool wert);
 
 // Getter
     int getNx();
     int getNy();
-    bool getZelle(int x, int y);
+    bool getCell(int x, int y);
 
 
 // 'Spiel des Lebens' - Regeln / Methoden
     int nachbar(int x, int y);
     void regel(int x, int y);
 
-    void Print();
-    void Envolve();
+    void print();
+    void evolve();
 };
 
 #endif // CABASE_H

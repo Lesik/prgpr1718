@@ -11,18 +11,17 @@ void Start(bool end) {
     do {
         const char *functions[] = {"Exit", "Evolve", "Set alive cell", "Reprint", "Resize"};
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++)
             cout << i << ". " << functions[i] << endl;
-        }
 
         int zahl, x, y;
         cin >> zahl;
         switch (zahl) {
             case 0 : end = 1; break;
-            case 1 : base.Envolve(); break;
-            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setZelle(x,y); break;
-            case 3 : base.Print(); break;
-            case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setGroese(x,y); break;
+            case 1 : base.evolve(); base.print(); break;
+            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setCell(x, y, true); break;
+            case 3 : base.print(); break;
+            case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setSize(x, y); break;
         }
     } while (end == false);
 }

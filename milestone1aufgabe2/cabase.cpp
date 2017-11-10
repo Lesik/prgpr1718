@@ -1,112 +1,128 @@
 #include <iostream>
+#include <cstdlib>
 #include "CAbase.h"
 
 using namespace std;
 
-CAbase::CAbase(int x, int y) // Initialisiere Spiel
+/*
+ * Constructor – set
+ */
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); populateRandomly(); }
+
+/*
+ * Empty deconstructor
+ */
+CAbase::~CAbase() {}
+
+int CAbase::getIndexByCoord(int x, int y) { return x + worldHeight * y; }
+
+void CAbase::createWorld()
 {
-    Nx = x; Ny = y;
-    for (int i=0; i<x*y; i++) {
-        currentworld[i] = 0;
-        nextgenworld[i] = 0;
+    currentworld = new bool[worldWidth * worldHeight];
+    nextgenworld = new bool[worldWidth * worldHeight];
+    for (int x = 0; x < worldWidth; x++) {
+        for (int y = 0; y < worldHeight; y++) {
+                currentworld[getIndexByCoord(x, y)] = false;
+                nextgenworld[getIndexByCoord(x, y)] = false;
+        }
     }
 }
 
-CAbase::~CAbase()
+void CAbase::populateRandomly()
 {
-    // empty deconstructor
+    for (int x = 0; x < worldWidth; x++) {
+        for (int y = 0; y < worldHeight; y++) {
+                currentworld[getIndexByCoord(x, y)] = rand() > (RAND_MAX / 2);
+                nextgenworld[getIndexByCoord(x, y)] = rand() > (RAND_MAX / 2);
+        }
+    }
 }
 
-
-// Setter & Getter - Methoden
-
-void CAbase::setGroese(int x, int y) // Erstellt die Größe des Feldes
+void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
 {
-    Nx = x;
-    Ny = y;
+    // DON'T USE YET
+    worldWidth = x;
+    worldHeight = y;
 }
 
-void CAbase::setZelle(int x, int y) // Setzt lebende Zelle auf Feld (x,y)
+void CAbase::setCell(int x, int y, bool wert) // Setzt wert auf Zelle (x,y)
 {
-    *currentworld[x*y] = 1;
+    currentworld[x + worldHeight * y] = wert;
 }
 
+/*
+ * Return true if element (x,y) is alive, false otherwise
+ */
+bool CAbase::getCell(int x, int y)
+{
+    return currentworld[x + worldHeight * y];
+}
 int CAbase::getNx() //
 {
-    return Nx;
+    return worldWidth;
 }
 
 int CAbase::getNy() //
 {
-    return Ny;
-}
-
-bool CAbase::getZelle(int x, int y) // Gibt den aktuellen Zustand von Feld (x,y)
-{
-    return currentworld[x*y];
+    return worldHeight;
 }
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
-    int AnzNachbar = 0;
-    if(*currentworld[(x-1)*(y-1)]==1) {AnzNachbar++;}
-    if(*currentworld[(x-1)*(y)]==1) {AnzNachbar++;}
-    if(*currentworld[(x-1)*(y+1)]==1) {AnzNachbar++;}
-    if(*currentworld[(x)*(y-1)]==1) {AnzNachbar++;}
-    if(*currentworld[(x)*(y+1)]==1) {AnzNachbar++;}
-    if(*currentworld[(x+1)*(y-1)]==1) {AnzNachbar++;}
-    if(*currentworld[(x+1)*(y)]==1) {AnzNachbar++;}
-    if(*currentworld[(x+1)*(y+1)]==1) {AnzNachbar++;}
+    int anzahlNachbar = 0;
+    if(getCell((x-1), (y-1))) {anzahlNachbar++;}
+    if(getCell((x-1), y)) {anzahlNachbar++;}
+    if(getCell((x-1), (y+1))) {anzahlNachbar++;}
+    if(getCell((x), (y-1))) {anzahlNachbar++;}
+    if(getCell((x), (y+1))) {anzahlNachbar++;}
+    if(getCell((x+1), (y-1))) {anzahlNachbar++;}
+    if(getCell((x+1), y)) {anzahlNachbar++;}
+    if(getCell((x+1), (y+1))) {anzahlNachbar++;}
 
-    return AnzNachbar;
+    return anzahlNachbar;
 }
 
-void CAbase::regel(int x, int y) // Regel von des Spiels
+void CAbase::print()
 {
-    if (CAbase::getZelle(x,y) == 1 && CAbase::nachbar(x,y) < 2) {
-        nextgenworld[x*y] = 0;
-    }
-    if (CAbase::nachbar(x,y) == 2 || CAbase::nachbar(x,y) == 3) {
-        nextgenworld[x*y] = 1;
-    }
-    if (CAbase::nachbar(x,y) > 3) {
-        nextgenworld[x*y] = 0;
-    }
-    if (CAbase::getZelle(x,y) == 0 && CAbase::nachbar(x,y) == 3) {
-        nextgenworld[x*y] = 1;
-    }
-}
-
-
-void CAbase::Print()
-{
-    for (int i=0; i< Nx; i++) {
-        for (int k=0; k<Ny; k++) {
-            if (i==0 || i==Nx-1 || k==0) {
-                cout << " . ";
-            }
-            if(*currentworld[Nx*Ny] == 1) {
+    for (int i = 0; i < worldHeight; i++) {
+        for (int k = 0; k < worldWidth; k++) {
+            if (currentworld[getIndexByCoord(i, k)]) {
                 cout << " * ";
             }
             else {
                 cout << "   ";
             }
-            if (k==Ny-1) {
-                cout << "." << endl;
-            }
         }
+        cout << endl;
     }
     cout << endl;
 }
 
-void CAbase::Envolve()
+void CAbase::regel(int x, int y) // Regel des Spiels
 {
-    for (int i=0; i<Nx; i++) {
-        for(int j=0; j<Ny; j++) {
-            CAbase::regel(i, j);
-        }
+    int value = getCell(x, y);
+    int neighbors = nachbar(x, y);
+    if (value == true && neighbors < 2) {
+        nextgenworld[x*y] = 0;
     }
-    for (int k=0; k<Nx*Ny; k++) {
-        //*A1[k] = *A2[k];
+    if (neighbors == 2 || neighbors == 3) {
+        nextgenworld[x*y] = 1;
     }
+    if (neighbors > 3) {
+        nextgenworld[x*y] = 0;
+    }
+    if (value == false && neighbors == 3) {
+        nextgenworld[x*y] = 1;
+    }
+}
+
+void CAbase::evolve()
+{
+    for (int x = 0; x < worldHeight; x++)
+        for (int y = 0; y < worldWidth; y++)
+            regel(x, y);
+
+    for (int x = 0; x < worldHeight; x++)
+        for (int y = 0; y < worldWidth; y++)
+            currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
 }
