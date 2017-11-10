@@ -5,8 +5,8 @@ class CAbase
 {
 private:
     int worldWidth, worldHeight;                 // Menmbervariable
-    bool* currentworld;
-    bool* nextgenworld;
+    int* currentworld;
+    int* nextgenworld;
     void createWorld();
     void populateRandomly();
     int getIndexByCoord(int x, int y);
@@ -17,12 +17,13 @@ public:
 
 // Setter
     void setSize(int x, int y);
-    void setCell(int x, int y, bool wert);
+    void setCell(int x, int y, int wert);
+    void setCell_next(int x, int y, int wert);
 
 // Getter
     int getNx();
     int getNy();
-    bool getCell(int x, int y);
+    int getCell(int x, int y);
 
 
 // 'Spiel des Lebens' - Regeln / Methoden

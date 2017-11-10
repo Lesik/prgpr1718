@@ -19,7 +19,7 @@ void Start(bool end) {
         switch (zahl) {
             case 0 : end = 1; break;
             case 1 : base.evolve(); base.print(); break;
-            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setCell(x, y, true); break;
+            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setCell(x, y, 1); break;
             case 3 : base.print(); break;
             case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setSize(x, y); break;
         }
