@@ -9,6 +9,7 @@ private:
     int* nextgenworld;
     void createWorld();
     void populateRandomly();
+    void populate_test();
     int getIndexByCoord(int x, int y);
 
 public:

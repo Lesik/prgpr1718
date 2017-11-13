@@ -7,6 +7,7 @@ using namespace std;
 // Startmenü
 void Start(bool end) {
     CAbase base(30, 30);
+    base.print();
 
     do {
         const char *functions[] = {"Exit", "Evolve", "Set alive cell", "Reprint", "Resize"};
@@ -19,7 +20,7 @@ void Start(bool end) {
         switch (zahl) {
             case 0 : end = 1; break;
             case 1 : base.evolve(); base.print(); break;
-            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setCell(x, y, 1); break;
+            case 2 : cout << "Feld angeben: " << endl; cin >> x >> y; base.setCell(x - 1, y - 1, 1); break;
             case 3 : base.print(); break;
             case 4 : cout << "Größe angeben: " << endl; cin >> x >> y; base.setSize(x, y); break;
         }
