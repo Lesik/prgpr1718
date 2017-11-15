@@ -62,6 +62,11 @@ void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
     // DON'T USE YET
     worldWidth = x;
     worldHeight = y;
+
+    delete[] currentworld;
+    currentworld = new int [x * y];
+    delete[] nextgenworld;
+    nextgenworld = new int [x * y];
 }
 
 void CAbase::setCell(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
