@@ -46,6 +46,9 @@ void CAbase::populate_test()
     }
     currentworld[getIndexByCoord(0, 0)] = 1;
     currentworld[getIndexByCoord(29, 29)] = 1;
+    currentworld[getIndexByCoord(0, 3)] = 1;
+    currentworld[getIndexByCoord(0, 4)] = 1;
+    currentworld[getIndexByCoord(0, 5)] = 1;
     // blinker
     currentworld[getIndexByCoord(4, 4)] = 1;
     currentworld[getIndexByCoord(5, 4)] = 1;
@@ -62,11 +65,10 @@ void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
     // DON'T USE YET
     worldWidth = x;
     worldHeight = y;
-
     delete[] currentworld;
-    currentworld = new int [x * y];
-    delete[] nextgenworld;
-    nextgenworld = new int [x * y];
+    currentworld = new int[x * y];
+    delete [] nextgenworld;
+    nextgenworld = new int[x * y];
 }
 
 void CAbase::setCell(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
@@ -98,22 +100,52 @@ int CAbase::getNy() //
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
-    int anzahlNachbar = 0;
-    int arrayX[8] = {x - 1, x - 1, x - 1, x, x, x + 1, x + 1, x + 1};
-    int arrayY[8] = {y - 1, y, y + 1, y - 1, y + 1, y - 1, y, y + 1};
-    for(int i = 0; i < 8; i++) {
-        if(arrayX[i] > worldHeight)
-            arrayX[i] = 0;
-        if(arrayX[i] < 0)
-            arrayX[i] = worldHeight;
-        if(arrayY[i] > worldWidth)
-            arrayX[i] = 0;
-        if(arrayY[i] < 0)
-            arrayX[i] = worldWidth;
-        if(getCell(arrayX[i], arrayY[i])) anzahlNachbar++;
+    if (x == 0 && y == 0) {
+        return (getCell(0, 1) + getCell(1, 1) + getCell(1, 0) + getCell(1, getNy() - 1)
+                + getCell(0, getNy() - 1) + getCell(getNx() - 1, 0) + getCell(getNx() - 1, 1)
+                + getCell(getNx() - 1, getNy() - 1));
     }
-
-    return anzahlNachbar;
+    //rechts oben
+    else if (x == getNx() - 1 && y == 0) {
+        return (getCell(x, 1) + getCell(x - 1, 1) + getCell(x, 0) + getCell(x - 1, getNy() - 1)
+                + getCell(x, getNy() - 1) + getCell(0, getNy() - 1) + getCell(0, 0) + getCell(0, 1));
+    }
+    //links unten
+    else if (x == 0 && y == getNy() - 1) {
+        return (getCell(0, y - 1) + getCell(1, y - 1) + getCell(1, y)
+                + getCell(1, 0) + getCell(0, 0) + getCell(getNx() - 1, 0) + getCell(getNx() - 1, y)
+                + getCell(getNx() - 1, y - 1));
+    }
+    //rechts unten
+    else if (x == getNx() - 1 && y == getNy() - 1) {
+        return (getCell(x, y - 1) + getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, 0) + getCell(x - 1, 0)
+                + getCell(0, 0) + getCell(0, y) + getCell(0, y - 1));
+    }
+    //erste reihe
+    else if (y == 0) {
+        return (getCell(x - 1, 0) + getCell(x - 1,  1) + getCell(x, 1) + getCell(x + 1, 1)
+               + getCell(x + 1, 0) + getCell(x - 1, getNy() - 1) + getCell(x, getNy() - 1) + getCell(x + 1, getNy() - 1));
+    }
+    //letzte reihe
+    else if (y == getNy() - 1) {
+        return (getCell(x - 1, y - 1) + getCell(x, y - 1) + getCell(x + 1, y - 1) + getCell(x - 1, y)
+               + getCell(x + 1, y) + getCell(x - 1, 0) + getCell(x, 0) + getCell(x + 1, 0));
+    }
+    //erste spalte
+    else if (x == 0) {
+        return (getCell(0, y - 1) + getCell(0, y + 1) + getCell(1, y - 1) + getCell(1, y)
+               + getCell(1, y + 1) + getCell(getNx() - 1, y - 1) + getCell(getNx() - 1, y) + getCell(getNx() - 1, y + 1));
+    }
+    //letzte spalte
+    else if (x == getNx() - 1) {
+        return (getCell(x, y - 1) + getCell(x, y + 1) + getCell(x - 1, y - 1) + getCell(x - 1,  y)
+               + getCell(x - 1, y + 1) + getCell(0, y - 1) + getCell(0, y) + getCell(0, y + 1));
+    }
+    //rest
+    else {
+        return (getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, y + 1) + getCell(x, y - 1)
+               + getCell(x, y + 1) + getCell(x + 1, y - 1) + getCell(x + 1, y) + getCell(x + 1, y + 1));
+    }
 }
 
 void CAbase::print() {
