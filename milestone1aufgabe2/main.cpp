@@ -9,6 +9,8 @@ void Start(bool end) {
     CAbase base(30, 30);
     base.print();
 
+    cout << endl << base.nachbar(12,12);
+
     do {
         const char *functions[] = {"Exit", "Evolve", "Set alive cell", "Reprint", "Resize"};
 

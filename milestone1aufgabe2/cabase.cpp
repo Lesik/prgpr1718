@@ -98,52 +98,22 @@ int CAbase::getNy() //
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
-    if (x == 0 && y == 0) {
-        return (getCell(0, 1) + getCell(1, 1) + getCell(1, 0) + getCell(1, getNy() - 1)
-                + getCell(0, getNy() - 1) + getCell(getNx() - 1, 0) + getCell(getNx() - 1, 1)
-                + getCell(getNx() - 1, getNy() - 1));
+    int anzahlNachbar = 0;
+    int arrayX[8] = {x - 1, x - 1, x - 1, x, x, x + 1, x + 1, x + 1};
+    int arrayY[8] = {y - 1, y, y + 1, y - 1, y + 1, y - 1, y, y + 1};
+    for(int i = 0; i < 8; i++) {
+        if(arrayX[i] > worldHeight)
+            arrayX[i] = 0;
+        if(arrayX[i] < 0)
+            arrayX[i] = worldHeight;
+        if(arrayY[i] > worldWidth)
+            arrayX[i] = 0;
+        if(arrayY[i] < 0)
+            arrayX[i] = worldWidth;
+        if(getCell(arrayX[i], arrayY[i])) anzahlNachbar++;
     }
-    //rechts oben
-    else if (x == getNx() - 1 && y == 0) {
-        return (getCell(x, 1) + getCell(x - 1, 1) + getCell(x, 0) + getCell(x - 1, getNy() - 1)
-                + getCell(x, getNy() - 1) + getCell(0, getNy() - 1) + getCell(0, 0) + getCell(0, 1));
-    }
-    //links unten
-    else if (x == 0 && y == getNy() - 1) {
-        return (getCell(0, y - 1) + getCell(1, y - 1) + getCell(1, y)
-                + getCell(1, 0) + getCell(0, 0) + getCell(getNx() - 1, 0) + getCell(getNx() - 1, y)
-                + getCell(getNx() - 1, y - 1));
-    }
-    //rechts unten
-    else if (x == getNx() - 1 && y == getNy() - 1) {
-        return (getCell(x, y - 1) + getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, 0) + getCell(x - 1, 0)
-                + getCell(0, 0) + getCell(0, y) + getCell(0, y - 1));
-    }
-    //erste reihe
-    else if (y == 0) {
-        return (getCell(x - 1, 0) + getCell(x - 1,  1) + getCell(x, y + 1) + getCell(x + 1, 1)
-               + getCell(x + 1, 0) + getCell(x - 1, getNy() - 1) + getCell(x, getNy() - 1) + getCell(x + 1, getNy() - 1));
-    }
-    //letzte reihe
-    else if (y == getNy() - 1) {
-        return (getCell(x - 1, y - 1) + getCell(x, y - 1) + getCell(x, y - 1) + getCell(x - 1, y)
-               + getCell(x + 1, y) + getCell(x - 1, 0) + getCell(x, 0) + getCell(x + 1, 0));
-    }
-    //erste spalte
-    else if (x == 0) {
-        return (getCell(0, y - 1) + getCell(0, y + 1) + getCell(1, y - 1) + getCell(1, y)
-               + getCell(1, y + 1) + getCell(getNx() - 1, y - 1) + getCell(getNx() - 1, y) + getCell(getNx() - 1, y + 1));
-    }
-    //letzte spalte
-    else if (x == getNx() - 1) {
-        return (getCell(x, y - 1) + getCell(x, y + 1) + getCell(x - 1, y - 1) + getCell(x - 1,  y)
-               + getCell(x + 1, y + 1) + getCell(0, y - 1) + getCell(0, y) + getCell(0, y + 1));
-    }
-    //rest
-    else {
-        return (getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, y + 1) + getCell(x, y - 1)
-               + getCell(x, y + 1) + getCell(x + 1, y - 1) + getCell(x + 1, y) + getCell(x + 1, y + 1));
-    }
+
+    return anzahlNachbar;
 }
 
 void CAbase::print() {
