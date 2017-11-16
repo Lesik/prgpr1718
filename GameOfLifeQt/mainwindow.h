@@ -19,6 +19,8 @@ public:
 private slots:
     void on_startButton_clicked();
 
+    void on_stopButton_clicked();
+
 private:
     GameWidget* game;
     Ui::MainWindow *ui;
