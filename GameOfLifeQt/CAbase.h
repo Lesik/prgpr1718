@@ -13,6 +13,7 @@ private:
     int getIndexByCoord(int x, int y);
 
 public:
+    CAbase();
     CAbase(int x, int y); // Konstruktor
     ~CAbase(); // Destruktor
 

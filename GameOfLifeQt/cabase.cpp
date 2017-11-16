@@ -7,6 +7,7 @@ using namespace std;
 /*
  * Constructor – set
  */
+CAbase::CAbase() {}
 CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); populate_test(); }
 
 /*
