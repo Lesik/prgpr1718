@@ -16,9 +16,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_startButton_clicked();
+
 private:
+    GameWidget* game;
     Ui::MainWindow *ui;
-    GameWidget game;
 };
 
 #endif // MAINWINDOW_H

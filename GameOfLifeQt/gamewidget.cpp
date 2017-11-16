@@ -3,16 +3,17 @@
 #include <QMouseEvent>
 #include <QRectF>
 #include <QPainter>
+#include <iostream>
 
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
     timer(new QTimer(this))
 {
-    connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
+    //connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
 }
 
 void GameWidget::setTimerIntervall(int t) {
-    timer->setInterval(t);
+    //timer->setInterval(t);
 }
 
 void GameWidget::setUniverseSize(int size) {
@@ -20,18 +21,13 @@ void GameWidget::setUniverseSize(int size) {
 }
 
 void GameWidget::startGame() {
-    timer->start();
+    std::cout << "asd" << std::endl;
+    //timer->start();
 }
 
 void GameWidget::stopGame() {
-    timer->stop();
+    //timer->stop();
 }
 
 void GameWidget::clear() {
-    for(int k = 1; k <= universeSize; k++) {
-        for(int j = 1; j <= universeSize; j++) {
-            universe[k*universeSize + j] = false;
-        }
-    }
-    gameEnds(true);
 }

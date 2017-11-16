@@ -17,15 +17,15 @@ public:
     void startGame();
     void stopGame();
     void clear();
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    //void mousePressEvent(QMouseEvent *event);
+    //void mouseMoveEvent(QMouseEvent *event);
 
 signals:
 
 public slots:
-    void newGeneration();
-    void paintGrid();
-    void paintUniverse();
+    //void newGeneration();
+    //void paintGrid();
+    //void paintUniverse();
 
 private:
     QTimer timer;

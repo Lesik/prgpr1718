@@ -38,21 +38,21 @@
      <item row="0" column="1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QPushButton" name="Button_start">
+        <widget class="QPushButton" name="startButton">
          <property name="text">
           <string>Start</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QPushButton" name="Button_stop">
+        <widget class="QPushButton" name="stopButton">
          <property name="text">
           <string>Stop</string>
          </property>
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QPushButton" name="Buttom_clear">
+        <widget class="QPushButton" name="clearButton">
          <property name="text">
           <string>Clear</string>
          </property>
@@ -132,14 +132,14 @@
      <item row="10" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="Button_load">
+        <widget class="QPushButton" name="loadButton">
          <property name="text">
           <string>Load</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="Button_save">
+        <widget class="QPushButton" name="saveButton">
          <property name="text">
           <string>Save</string>
          </property>
