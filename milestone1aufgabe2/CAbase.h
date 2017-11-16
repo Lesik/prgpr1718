@@ -19,8 +19,12 @@ public:
 
 // Setter
     void setSize(int x, int y);
-    void setCell(int x, int y, int wert);
-    void setCell_next(int x, int y, int wert);
+    void setCurrent(int x, int y);
+    void setNextgen(int x, int y);
+    void unsetCurrent(int x, int y);
+    void unsetNextgen(int x, int y);
+    void changeCurrent(int x, int y, bool wert);
+    void changeNextgen(int x, int y, bool wert);
 
 // Getter
     int getNx();
@@ -34,6 +38,8 @@ public:
 
     void print();
     void evolve();
+
+    bool runTests();
 };
 
 #endif // CABASE_H
