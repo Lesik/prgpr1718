@@ -8,7 +8,7 @@ using namespace std;
  * Constructor – set
  */
 CAbase::CAbase() {}
-CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); populate_test(); }
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); }
 
 /*
  * Empty deconstructor
@@ -38,49 +38,22 @@ void CAbase::populateRandomly()
     }
 }
 
-void CAbase::populate_test()
-{
-    for (int x = 0; x < worldWidth; x++) {
-        for (int y = 0; y < worldHeight; y++) {
-                currentworld[getIndexByCoord(x, y)] = 0;
-        }
-    }
-    currentworld[getIndexByCoord(0, 0)] = 1;
-    currentworld[getIndexByCoord(29, 29)] = 1;
-    currentworld[getIndexByCoord(0, 3)] = 1;
-    currentworld[getIndexByCoord(0, 4)] = 1;
-    currentworld[getIndexByCoord(0, 5)] = 1;
-    // blinker
-    currentworld[getIndexByCoord(4, 4)] = 1;
-    currentworld[getIndexByCoord(5, 4)] = 1;
-    currentworld[getIndexByCoord(6, 4)] = 1;
-    //rechteck
-    currentworld[getIndexByCoord(12, 12)] = 1;
-    currentworld[getIndexByCoord(12, 13)] = 1;
-    currentworld[getIndexByCoord(13, 12)] = 1;
-    currentworld[getIndexByCoord(13, 13)] = 1;
-}
-
 void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
 {
     // DON'T USE YET
     worldWidth = x;
     worldHeight = y;
     delete[] currentworld;
-    currentworld = new int[x * y];
     delete [] nextgenworld;
-    nextgenworld = new int[x * y];
+    createWorld();
 }
 
-void CAbase::setCell(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
-{
-    currentworld[x + worldHeight * y] = wert;
-}
-
-void CAbase::setCell_next(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
-{
-    nextgenworld[x + worldHeight * y] = wert;
-}
+void CAbase::setCurrent(int x, int y) { CAbase::changeCurrent(x, y, true); }
+void CAbase::setNextgen(int x, int y) { CAbase::changeNextgen(x, y, true); }
+void CAbase::unsetCurrent(int x, int y) { CAbase::changeCurrent(x, y, false); }
+void CAbase::unsetNextgen(int x, int y) { CAbase::changeNextgen(x, y, false); }
+void CAbase::changeCurrent(int x, int y, bool wert) { currentworld[x + worldHeight * y] = wert; }
+void CAbase::changeNextgen(int x, int y, bool wert) { nextgenworld[x + worldHeight * y] = wert; }
 
 /*
  * Return true if element (x,y) is alive, false otherwise
@@ -182,17 +155,17 @@ void CAbase::regel(int x, int y) // Regel des Spiels
     if (getCell(x, y) == 1) {
         switch (nachbar(x, y)) {
             case 2:
-                setCell_next(x, y, 1);
+                setNextgen(x, y);
                 break;
             case 3:
-                setCell_next(x, y, 1);
+                setNextgen(x, y);
                 break;
             default:
-                setCell_next(x, y, 0);
+                unsetNextgen(x, y);
         }
     }
      else {
-        if (nachbar(x, y) == 3) {setCell_next(x, y, 1);}
+        if (nachbar(x, y) == 3) setNextgen(x, y);
     }
 }
 
@@ -205,4 +178,17 @@ void CAbase::evolve()
     for (int y = 0; y < worldHeight; y++)
         for (int x = 0; x < worldWidth; x++)
             currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
+}
+
+bool CAbase::runTests() {
+    int changes = 12;
+    int changesX[changes] = {0, 29, 0, 0, 0, 4, 5, 6, 12, 12, 13, 13};
+    int changesY[changes] = {0, 29, 3, 4, 5, 6, 4, 4, 12, 13, 12, 13};
+    for (int i = 0; i < changes; i++) {
+        setCurrent(changesX[i], changesY[i]);
+    }
+    CAbase::print();
+    CAbase::evolve();
+    CAbase::print();
+    return true;
 }
