@@ -22,8 +22,8 @@ private slots:
     void on_stopButton_clicked();
 
 private:
-    GameWidget* game;
     Ui::MainWindow *ui;
+    GameWidget* game;
 };
 
 #endif // MAINWINDOW_H
