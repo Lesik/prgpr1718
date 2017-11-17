@@ -21,6 +21,12 @@ private slots:
 
     void on_stopButton_clicked();
 
+    void on_clearButton_clicked();
+
+    void on_SpinBox_generation_intervall_valueChanged(int msec);
+
+    void on_SpinBox_universe_size_valueChanged(int size);
+
 private:
     Ui::MainWindow *ui;
     GameWidget* game;

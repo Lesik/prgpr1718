@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     game(new GameWidget(this))
 {
     ui->setupUi(this);
+    ui->main
     ui->gameWidget->addWidget(game);
     game->show();
 }
@@ -19,3 +20,13 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_startButton_clicked() { game->startGame(); }
 void MainWindow::on_stopButton_clicked() { game->stopGame(); }
+void MainWindow::on_clearButton_clicked() { game->clear(); }
+void MainWindow::on_SpinBox_generation_intervall_valueChanged(int msec)
+{
+    game->setTimerIntervall(msec);
+}
+
+void MainWindow::on_SpinBox_universe_size_valueChanged(int size)
+{
+    game->setUniverseSize(size);
+}
