@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int qtgame(CAbase base, int argc, char* argv[]) {
+int qtgame(int argc, char* argv[]) {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
@@ -14,7 +14,9 @@ int qtgame(CAbase base, int argc, char* argv[]) {
     return a.exec();
 }
 
-void consolegame(CAbase base) {
+void consolegame() {
+    CAbase base(30, 30);
+
     bool end = false;
     do {
         base.print();
@@ -58,16 +60,13 @@ void consolegame(CAbase base) {
 
 int main(int argc, char* argv[])
 {
-    CAbase base(30, 30);
-
     cout << "Press 0 for Qt interface or 1 for terminal interface." << endl;
     int input; cin >> input;
     switch (input) {
         case 0:
-            base.runTests();
-            qtgame(base, argc, argv); break;
+            qtgame(argc, argv); break;
         case 1:
-            consolegame(base); break;
+            consolegame(); break;
     }
     return 0;
 }

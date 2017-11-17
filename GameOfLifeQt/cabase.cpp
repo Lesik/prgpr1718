@@ -7,7 +7,7 @@ using namespace std;
 /*
  * Constructor – set
  */
-CAbase::CAbase() {}
+CAbase::CAbase() : CAbase(30, 30) {}
 CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); }
 
 /*
@@ -16,6 +16,16 @@ CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); }
 CAbase::~CAbase() {}
 
 int CAbase::getIndexByCoord(int x, int y) { return x + worldHeight * y; }
+
+void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
+{
+    // DON'T USE YET
+    worldWidth = x;
+    worldHeight = y;
+    delete[] currentworld;
+    delete [] nextgenworld;
+    createWorld();
+}
 
 void CAbase::createWorld()
 {
@@ -38,39 +48,19 @@ void CAbase::populateRandomly()
     }
 }
 
-void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
-{
-    // DON'T USE YET
-    worldWidth = x;
-    worldHeight = y;
-    delete[] currentworld;
-    delete [] nextgenworld;
-    createWorld();
-}
-
 void CAbase::setCurrent(int x, int y) { CAbase::changeCurrent(x, y, true); }
 void CAbase::setNextgen(int x, int y) { CAbase::changeNextgen(x, y, true); }
 void CAbase::unsetCurrent(int x, int y) { CAbase::changeCurrent(x, y, false); }
 void CAbase::unsetNextgen(int x, int y) { CAbase::changeNextgen(x, y, false); }
-void CAbase::changeCurrent(int x, int y, bool wert) { currentworld[x + worldHeight * y] = wert; }
-void CAbase::changeNextgen(int x, int y, bool wert) { nextgenworld[x + worldHeight * y] = wert; }
+void CAbase::changeCurrent(int x, int y, bool wert) { currentworld[getIndexByCoord(x, y)] = wert; }
+void CAbase::changeNextgen(int x, int y, bool wert) { nextgenworld[getIndexByCoord(x, y)] = wert; }
 
 /*
  * Return true if element (x,y) is alive, false otherwise
  */
-int CAbase::getCell(int x, int y)
-{
-    return currentworld[x + worldHeight * y];
-}
-int CAbase::getNx() //
-{
-    return worldWidth;
-}
-
-int CAbase::getNy() //
-{
-    return worldHeight;
-}
+bool CAbase::getCell(int x, int y) { return currentworld[getIndexByCoord(x, y)]; }
+int CAbase::getNx() { return worldWidth; }
+int CAbase::getNy() { return worldHeight; }
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {

@@ -22,7 +22,7 @@ public:
 signals:
 
 protected:
-    void paintEvent(QPaintEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
     void mousePressEvent(QMouseEvent *event) override;
 
 public slots:
