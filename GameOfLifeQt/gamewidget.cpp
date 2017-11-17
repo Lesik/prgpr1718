@@ -34,25 +34,35 @@ void GameWidget::stopGame() {
 void GameWidget::clear() {
 }
 
+/*
+ * Overriden function that is called whenever widget wants to redraw.
+ */
 void GameWidget::paintEvent(QPaintEvent *)
 {
+    // initiate painter
     QPainter painter(this);
-    QRect borders(0, 0, width() - 1, height() - 1);
     painter.setPen(Qt::darkGreen);
+    // calculate width and height of cell by dividing available space by amount of cells needed
     double cellWidth = (double) width() / ca.getNx();
     double cellHeight = (double) height() / ca.getNy();
+    // draw cell dividers
     for (double i = cellWidth; i <= width(); i += cellWidth)
         painter.drawLine(i, 0, i, height());
     for (double i = cellHeight; i <= height(); i += cellHeight)
         painter.drawLine(0, i, width(), i);
+
+    // draw border from x = 0, y = 0 to x = width - 1, y = height - 1
+    QRect borders(0, 0, width() - 1, height() - 1);
     painter.drawRect(borders);
 
-    for (int x = 1; x < ca.getNx(); x++) {
-        for (int y = 1; y < ca.getNy(); y++) {
+    // for each cell in world, if is alive
+    for (int x = 0; x < ca.getNx(); x++) {
+        for (int y = 0; y < ca.getNy(); y++) {
             if (ca.getCell(x, y)) {
-                std::cout << "drawing (" << x << ", " << y << ")" << std::endl;
-                qreal left = (qreal) (cellWidth * x - cellWidth);
-                qreal top = (qreal) (cellHeight * y - cellHeight);
+                // calculate left and top edges by calculating distance from top left edge
+                qreal left = (qreal) (cellWidth * x);
+                qreal top = (qreal) (cellHeight * y);
+                // the cell should be cellWidth wide and cellHeight tall
                 QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
                 painter.fillRect(r, Qt::darkBlue);
             }
