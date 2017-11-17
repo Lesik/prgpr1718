@@ -35,7 +35,7 @@ void GameWidget::clear() {
 
 void GameWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter painter;
+    QPainter painter(this);
     QRect borders(0, 0, width() - 1, height() - 1);
     painter.drawRect(1, 2, 6, 4);
     painter.setPen(Qt::darkGreen);
@@ -44,7 +44,17 @@ void GameWidget::paintEvent(QPaintEvent *event)
     for (double i = cellWidth; i <= width(); i += cellWidth)
         painter.drawLine(i, 0, i, height());
     for (double i = cellHeight; i <= height(); i += cellHeight)
-        painter.drawLine(i, 0, i, width());
+        painter.drawLine(0, i, width(), i);
+    painter.drawRect(borders);
+
+    for (int x = 1; x <= ca.getNx(); x++)
+        for (int y = 1; y <= ca.getNy(); y++)
+            if (ca.getCell(x, y)) {
+                qreal left = (qreal) (cellWidth * y - cellWidth);
+                qreal top = (qreal) (cellHeight * x - cellHeight);
+                QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+                painter.fillRect(r, Qt::darkBlue);
+            }
 }
 
 void GameWidget::mousePressEvent(QMouseEvent *event)

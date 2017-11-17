@@ -51,7 +51,7 @@ void consolegame(CAbase base) {
                 break;
             case 5:
                 cout << "Running automated tests..." << endl;
-
+                base.runTests();
         }
     } while (end == false);
 }
@@ -64,6 +64,7 @@ int main(int argc, char* argv[])
     int input; cin >> input;
     switch (input) {
         case 0:
+            base.runTests();
             qtgame(base, argc, argv); break;
         case 1:
             consolegame(base); break;

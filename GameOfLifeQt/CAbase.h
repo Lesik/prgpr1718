@@ -9,7 +9,6 @@ private:
     int* nextgenworld;
     void createWorld();
     void populateRandomly();
-    void populate_test();
     int getIndexByCoord(int x, int y);
 
 public:
@@ -29,7 +28,7 @@ public:
 // Getter
     int getNx();
     int getNy();
-    int getCell(int x, int y);
+    bool getCell(int x, int y);
 
 
 // 'Spiel des Lebens' - Regeln / Methoden
