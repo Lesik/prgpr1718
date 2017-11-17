@@ -54,6 +54,11 @@ void CAbase::unsetCurrent(int x, int y) { CAbase::changeCurrent(x, y, false); }
 void CAbase::unsetNextgen(int x, int y) { CAbase::changeNextgen(x, y, false); }
 void CAbase::changeCurrent(int x, int y, bool wert) { currentworld[getIndexByCoord(x, y)] = wert; }
 void CAbase::changeNextgen(int x, int y, bool wert) { nextgenworld[getIndexByCoord(x, y)] = wert; }
+void CAbase::invertCurrent(int x, int y)
+{
+    int index = getIndexByCoord(x, y);
+    currentworld[index] = !currentworld[index];
+}
 
 /*
  * Return true if element (x,y) is alive, false otherwise

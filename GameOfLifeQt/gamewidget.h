@@ -35,6 +35,9 @@ private:
     QColor colour;
     int worldSize;
     CAbase ca;
+    double cellWidth;
+    double cellHeight;
+    void calculateCellSize();
 };
 
 #endif // GAMEWIDGET_H

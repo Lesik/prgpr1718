@@ -4,6 +4,7 @@
 #include <QMouseEvent>
 #include <QRectF>
 #include <QPainter>
+#include "qmath.h"
 #include <iostream>
 
 GameWidget::GameWidget(QWidget *parent) :
@@ -23,7 +24,6 @@ void GameWidget::setUniverseSize(int size) {
 }
 
 void GameWidget::startGame() {
-    std::cout << "asd" << std::endl;
     timer->start(100);
 }
 
@@ -39,12 +39,10 @@ void GameWidget::clear() {
  */
 void GameWidget::paintEvent(QPaintEvent *)
 {
+    calculateCellSize();
     // initiate painter
     QPainter painter(this);
     painter.setPen(Qt::darkGreen);
-    // calculate width and height of cell by dividing available space by amount of cells needed
-    double cellWidth = (double) width() / ca.getNx();
-    double cellHeight = (double) height() / ca.getNy();
     // draw cell dividers
     for (double i = cellWidth; i <= width(); i += cellWidth)
         painter.drawLine(i, 0, i, height());
@@ -72,5 +70,17 @@ void GameWidget::paintEvent(QPaintEvent *)
 
 void GameWidget::mousePressEvent(QMouseEvent *event)
 {
+    calculateCellSize();
+    int x = floor(event->x() / cellHeight);
+    int y = floor(event->y() / cellWidth);
 
+    ca.invertCurrent(x, y);
+    update();
+}
+
+void GameWidget::calculateCellSize()
+{
+    // calculate width and height of cell by dividing available space by amount of cells needed
+    cellWidth = (double) width() / ca.getNx();
+    cellHeight = (double) height() / ca.getNy();
 }

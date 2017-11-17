@@ -22,6 +22,7 @@ public:
     void setNextgen(int x, int y);
     void unsetCurrent(int x, int y);
     void unsetNextgen(int x, int y);
+    void invertCurrent(int x, int y);
     void changeCurrent(int x, int y, bool wert);
     void changeNextgen(int x, int y, bool wert);
 
