@@ -17,10 +17,13 @@ public:
     void startGame();
     void stopGame();
     void clear();
-    //void mousePressEvent(QMouseEvent *event);
     //void mouseMoveEvent(QMouseEvent *event);
 
 signals:
+
+protected:
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
 
 public slots:
     //void newGeneration();
@@ -28,7 +31,7 @@ public slots:
     //void paintUniverse();
 
 private:
-    QTimer timer;
+    QTimer* timer;
     QColor colour;
     int worldSize;
     CAbase ca;

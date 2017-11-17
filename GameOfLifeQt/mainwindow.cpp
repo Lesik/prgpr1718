@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent) :
     game(new GameWidget(this))
 {
     ui->setupUi(this);
+    ui->gameWidget->addWidget(game);
+    game->show();
 }
 
 MainWindow::~MainWindow()
