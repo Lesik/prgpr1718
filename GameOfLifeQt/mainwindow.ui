@@ -78,6 +78,12 @@
        <property name="minimum">
         <number>3</number>
        </property>
+       <property name="maximum">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
       </widget>
      </item>
      <item row="4" column="1">
@@ -103,9 +109,6 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1">
-      <widget class="QComboBox" name="ComboBox_universe_mode"/>
-     </item>
      <item row="8" column="1">
       <widget class="QLabel" name="Label_generation_intervall">
        <property name="text">
@@ -122,10 +125,13 @@
         <string> ms</string>
        </property>
        <property name="minimum">
-        <number>100</number>
+        <number>10</number>
        </property>
        <property name="maximum">
-        <number>60000</number>
+        <number>500</number>
+       </property>
+       <property name="singleStep">
+        <number>10</number>
        </property>
       </widget>
      </item>
@@ -167,6 +173,9 @@
         <string>GO!</string>
        </property>
       </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QComboBox" name="ComboBox_universe_mode"/>
      </item>
     </layout>
    </widget>
