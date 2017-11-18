@@ -16,30 +16,21 @@ GameWidget::GameWidget(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
 }
 
-void GameWidget::setTimerIntervall(int t) {
-    timer->setInterval(t);
-}
-
+// Setter
+void GameWidget::setTimerIntervall(int t) {timer->setInterval(t);}
 void GameWidget::setUniverseSize(int size) {
     universeSize = size;
     ca.setSize(size, size);
     update();
 }
 
-void GameWidget::startGame() {
-    timer->start();
-}
-
-void GameWidget::stopGame() {
-    timer->stop();
-}
-
-void GameWidget::clear() {
-    setUniverseSize(universeSize);
-}
+// Start, Stop und Clear Funktion
+void GameWidget::startGame() {timer->start();}
+void GameWidget::stopGame() {timer->stop();}
+void GameWidget::clear() {setUniverseSize(universeSize);}
 
 void GameWidget::newGeneration() {
-    ca.evolve();
+    ca.evolve();        // evolve() von CAbase
     update();
 }
 
@@ -89,7 +80,7 @@ void GameWidget::paintUniverse() {
         for(int i = 0; i < universeSize; i++) {
             if(ca.getCell(i, j) == 1) {
                 QRectF rec(i * cellGeometry, j * cellGeometry, cellGeometry, cellGeometry);
-                painter.fillRect(rec, Qt::black);
+                painter.fillRect(rec, Qt::black);                   // Zelle wird schwarz gefüllt
             }
         }
     }
@@ -98,15 +89,15 @@ void GameWidget::paintUniverse() {
 void GameWidget::saveToFile() {
     QString fileName = QFileDialog::getSaveFileName(this,
             tr("Save Current Universe"), "",
-            tr("Textfile (*.txt);;All Files (*)"));
+            tr("Textfile (*.txt);;All Files (*)"));                 // Speicherdatei wird als *txt gespeichert
 
     QFile myFile(fileName);
     if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
             QTextStream stream(&myFile);
-            stream << universeSize << endl;
+            stream << universeSize << endl;                         // Spielfeldgröße wird gepeichert
             for (int j = 0; j < universeSize; j++) {
                 for (int i = 0; i < universeSize; i++) {
-                    stream << ca.getCell(i, j) << endl;
+                    stream << ca.getCell(i, j) << endl;             // komplettes Spielfeld wird mit 0 und 1 gespeichert
                 }
             }
     }
@@ -116,16 +107,16 @@ void GameWidget::saveToFile() {
 void GameWidget::loadFromFile() {
     QString fileName = QFileDialog::getOpenFileName(this,
             tr("Load Saved Universe"), "",
-            tr("Textfile (*.txt);;All Files (*)"));
+            tr("Textfile (*.txt);;All Files (*)"));                 // *txt wird geladen
     QFile myFile(fileName);
     if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
         QTextStream in(&myFile);
         QString line = in.readLine();
-        setUniverseSize(line.toInt());
+        setUniverseSize(line.toInt());                              // Spielfeldgröße wird gelesen und geladen
         int i = 0;
         while(!in.atEnd()) {
             QString line = in.readLine();
-            ca.getCurrentWorld()[i] = line.toInt();
+            ca.getCurrentWorld()[i] = line.toInt();                 // Spielfeld wird gelesen und geladen
             i++;
         }
     }

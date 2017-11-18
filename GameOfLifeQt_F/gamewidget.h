@@ -30,11 +30,11 @@ public slots:
     void saveToFile();
     void loadFromFile();
 
-private:
+private:                    // Private Variablen
     QTimer *timer;
     QColor colour;
     int universeSize;
-    CAbase ca;
+    CAbase ca;              // CAbase aus vorherigen Aufgaben
 };
 
 #endif // GAMEWIDGET_H

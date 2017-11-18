@@ -17,7 +17,7 @@ CAbase::~CAbase() {}
 
 int CAbase::getIndexByCoord(int x, int y) { return x + worldHeight * y; }
 
-void CAbase::createWorld()
+void CAbase::createWorld()      // Erstellt leere Welt
 {
     currentworld = new int[worldWidth * worldHeight];
     nextgenworld = new int[worldWidth * worldHeight];
@@ -29,7 +29,7 @@ void CAbase::createWorld()
     }
 }
 
-void CAbase::populateRandomly()
+void CAbase::populateRandomly()     // Fühlt die Welt mit Random lebenden Zellen
 {
     for (int x = 0; x < worldWidth; x++) {
         for (int y = 0; y < worldHeight; y++) {
@@ -38,7 +38,7 @@ void CAbase::populateRandomly()
     }
 }
 
-void CAbase::populate_test()
+void CAbase::populate_test()        // Testwelt
 {
     for (int x = 0; x < worldWidth; x++) {
         for (int y = 0; y < worldHeight; y++) {
@@ -164,7 +164,7 @@ int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,
     }
 }
 
-void CAbase::print() {
+void CAbase::print() {          // Gibt die aktuelle Welt im Terminal an
     cout << ". ";
     for (int j = 0; j < worldWidth; j++) {
         cout << " . ";
@@ -211,13 +211,13 @@ void CAbase::regel(int x, int y) // Regel des Spiels
     }
 }
 
-void CAbase::evolve()
+void CAbase::evolve()           // Evolutionsstufe wird um 1 erhöht
 {
-    for (int y = 0; y < worldHeight; y++)
+    for (int y = 0; y < worldHeight; y++)       // Alle Felder werden die Regel getestet
         for (int x = 0; x < worldWidth; x++)
             regel(x, y);
 
-    for (int y = 0; y < worldHeight; y++)
+    for (int y = 0; y < worldHeight; y++)       // Überschreiben
         for (int x = 0; x < worldWidth; x++)
             currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
 }
