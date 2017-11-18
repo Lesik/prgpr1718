@@ -23,7 +23,7 @@
       <height>581</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="gameWidget"/>
+    <layout class="QVBoxLayout" name="gameWidget1"/>
    </widget>
    <widget class="QWidget" name="formLayoutWidget">
     <property name="geometry">
