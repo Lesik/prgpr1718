@@ -1,3 +1,9 @@
+/*
+    Fatih (), Javi (), Lesik (), Kelvin Tsang (5428328)
+
+    Milestone 1
+
+*/
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
 
