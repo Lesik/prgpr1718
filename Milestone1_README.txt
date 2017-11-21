@@ -18,13 +18,19 @@ There are no known issues. The program should work as expected.
 === Authors ===
 Kevin Tsang ():
   - Qt interface design
-  - TBA
+  - TBA (A2 Class methods)
 
 Javier Andres Quintero Arenas (6038555):
   - (Aufgabenteil1)
 
 Fatih ():
-  - TBA
+  - A2
+  - void print()
+  - void evolve()
+  - A3
+  - saveToFile()
+  - loadFromFile()
+  
 
 Oles Pidgornyy (6082200):
   - theoretical array concept (one-dimensional dynamic bool array)
