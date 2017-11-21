@@ -1,5 +1,5 @@
 /*
-    Fatih (), Javi (), Lesik (6081100), Kelvin Tsang (5428328)
+    Fatih (6251581), Javi (), Lesik (6081100), Kelvin Tsang (5428328)
 
     Milestone 1
 
@@ -21,7 +21,8 @@ CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); p
  */
 CAbase::~CAbase() {}
 
-int CAbase::getIndexByCoord(int x, int y) { return x + worldHeight * y; }
+// gibt Position des Elementes im Array zurück
+int CAbase::getIndexByCoord(int x, int y) {return x + worldHeight * y;}
 
 void CAbase::createWorld()      // Erstellt leere Welt
 {
@@ -83,42 +84,16 @@ void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
     }
 }
 
-void CAbase::setCell(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
-{
-    currentworld[x + worldHeight * y] = wert;
-}
+// Setzt wert auf Zelle (x,y)
+void CAbase::setCell(int x, int y, int wert) {currentworld[x + worldHeight * y] = wert;}
+void CAbase::setCell_next(int x, int y, int wert)) {nextgenworld[x + worldHeight * y] = wert;}
 
-void CAbase::setCell_next(int x, int y, int wert) // Setzt wert auf Zelle (x,y)
-{
-    nextgenworld[x + worldHeight * y] = wert;
-}
-
-/*
- * Return true if element (x,y) is alive, false otherwise
- */
-int CAbase::getCell(int x, int y)
-{
-    return currentworld[x + worldHeight * y];
-}
-int CAbase::getNx() //
-{
-    return worldWidth;
-}
-
-int CAbase::getNy() //
-{
-    return worldHeight;
-}
-
-int* CAbase::getCurrentWorld()
-{
-    return currentworld;
-}
-
-int* CAbase::getNextGenWorld()
-{
-    return nextgenworld;
-}
+// Definition der Getter
+int CAbase::getCell(int x, int y) {return currentworld[x + worldHeight * y];}
+int CAbase::getNx() {return worldWidth;}
+int CAbase::getNy() {return worldHeight;}
+int* CAbase::getCurrentWorld() {return currentworld;}
+int* CAbase::getNextGenWorld() {return nextgenworld;}
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
@@ -170,7 +145,8 @@ int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,
     }
 }
 
-void CAbase::print() {          // Gibt die aktuelle Welt im Terminal an
+// Gibt die aktuelle Welt im Terminal an
+void CAbase::print() {
     cout << ". ";
     for (int j = 0; j < worldWidth; j++) {
         cout << " . ";
@@ -198,7 +174,8 @@ void CAbase::print() {          // Gibt die aktuelle Welt im Terminal an
     cout << endl;
 }
 
-void CAbase::regel(int x, int y) // Regel des Spiels
+// Regel des Spiels
+void CAbase::regel(int x, int y)
 {
     if (getCell(x, y) == 1) {
         switch (nachbar(x, y)) {
