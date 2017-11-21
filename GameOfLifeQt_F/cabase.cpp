@@ -72,9 +72,9 @@ void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
 {
     worldWidth = x;
     worldHeight = y;
-    delete[] currentworld;
+    // delete[] currentworld;
     currentworld = new int[x * y];
-    delete [] nextgenworld;
+    // delete [] nextgenworld;
     nextgenworld = new int[x * y];
     for (int x = 0; x < worldWidth; x++) {
         for (int y = 0; y < worldHeight; y++) {
