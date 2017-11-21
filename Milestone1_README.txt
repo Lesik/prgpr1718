@@ -20,8 +20,8 @@ Kevin Tsang ():
   - Qt interface design
   - TBA
 
-Javier Andres Quintero Arenas ():
-  - TBA
+Javier Andres Quintero Arenas (6038555):
+  - (Aufgabenteil1)
 
 Fatih ():
   - TBA
