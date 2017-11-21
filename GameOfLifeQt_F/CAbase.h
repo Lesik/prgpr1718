@@ -7,10 +7,11 @@
 #ifndef CABASE_H
 #define CABASE_H
 
+// Klasse CAbase wird definiert
 class CAbase
 {
 private:
-    int worldWidth, worldHeight;                 // Menmbervariable
+    int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
     void createWorld();
@@ -19,8 +20,10 @@ private:
     int getIndexByCoord(int x, int y);
 
 public:
+    // Konstruktoren
     CAbase();
-    CAbase(int x, int y); // Konstruktor
+    CAbase(int x, int y);
+    // Destruktor
     ~CAbase(); // Destruktor
 
 // Setter
