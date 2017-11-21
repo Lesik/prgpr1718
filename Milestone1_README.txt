@@ -18,7 +18,7 @@ There are no known issues. The program should work as expected.
 === Authors ===
 Kevin Tsang ():
   - Qt interface design
-  - TBA (A2 Class methods)
+  - TBA
 
 Javier Andres Quintero Arenas (6038555):
   - (Aufgabenteil1)
