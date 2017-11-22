@@ -84,7 +84,7 @@ void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
 
 // Setzt wert auf Zelle (x,y)
 void CAbase::setCell(int x, int y, int wert) {currentworld[x + worldHeight * y] = wert;}
-void CAbase::setCell_next(int x, int y, int wert)) {nextgenworld[x + worldHeight * y] = wert;}
+void CAbase::setCell_next(int x, int y, int wert) {nextgenworld[x + worldHeight * y] = wert;}
 
 // Definition der Getter
 int CAbase::getCell(int x, int y) {return currentworld[x + worldHeight * y];}
