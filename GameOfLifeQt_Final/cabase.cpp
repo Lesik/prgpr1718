@@ -113,7 +113,7 @@ int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,
     }
     //rechts unten
     else if (x == getNx() - 1 && y == getNy() - 1) {
-        return (getCell(x, y - 1) + getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, 0) + getCell(x - 1, 0)
+        return (getCell(x, y - 1) + getCell(x - 1, y - 1) + getCell(x - 1, y) + getCell(x - 1, 0) + getCell(x, 0)
                 + getCell(0, 0) + getCell(0, y) + getCell(0, y - 1));
     }
     //erste reihe
