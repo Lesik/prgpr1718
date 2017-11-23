@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = GameOfLife
+TARGET = prgpr1718
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
