@@ -14,6 +14,7 @@ private:
     int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
+    void changeGame(int index);
     void generate();
     int getIndexByCoord(int x, int y);
 

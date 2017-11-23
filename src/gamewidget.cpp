@@ -143,14 +143,6 @@ void GameWidget::loadFromFile() {
 }
 
 void GameWidget::changeGame(int index) {
-    switch (index) {
-    case 0:
-        ca.startGameOfLife();
-        break;
-    case 1:
-        ca.startSnake();
-        break;
-    }
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {

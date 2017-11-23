@@ -12,7 +12,7 @@ using namespace std;
  * Constructor – set
  */
 CAbase::CAbase() {}
-CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; startGameOfLife(); populate_test(); }
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; generate(); }
 
 /*
  * Empty deconstructor
@@ -37,14 +37,16 @@ void CAbase::generate() {
     currentworld = new int[worldWidth * worldHeight];
     nextgenworld = new int[worldWidth * worldHeight];
 
-    if (game == GameOfLife) {
+    switch (game) {
+    case GameOfLife:
         for (int x = 0; x < worldWidth; x++) {
             for (int y = 0; y < worldHeight; y++) {
                     currentworld[getIndexByCoord(x, y)] = 0;
                     nextgenworld[getIndexByCoord(x, y)] = 0;
             }
         }
-    } else if (game == Snake) {
+        break;
+    case Snake:
         for (int x = 0; x < worldWidth; x++) {
             for (int y = 0; y < worldHeight; y++) {
                     currentworld[getIndexByCoord(x, y)] = 0;
@@ -171,15 +173,20 @@ void CAbase::regel(int x, int y)
     }
 }
 
-void CAbase::evolve()           // Evolutionsstufe wird um 1 erhöht
-{
-    for (int y = 0; y < worldHeight; y++)       // Alle Felder werden die Regel getestet
-        for (int x = 0; x < worldWidth; x++)
-            regel(x, y);
+void CAbase::evolve() {
+    switch (game) {
+    case GameOfLife:
+        for (int y = 0; y < worldHeight; y++)       // Alle Felder werden die Regel getestet
+            for (int x = 0; x < worldWidth; x++)
+                regel(x, y);
 
-    for (int y = 0; y < worldHeight; y++)       // Überschreiben
-        for (int x = 0; x < worldWidth; x++)
-            currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
+        for (int y = 0; y < worldHeight; y++)       // Überschreiben
+            for (int x = 0; x < worldWidth; x++)
+                currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
+        break;
+    case Snake:
+        break;
+    }
 }
 
 void CAbase::onUp()
