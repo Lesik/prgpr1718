@@ -30,6 +30,8 @@ private slots:
     void on_Button_save_clicked();
     void on_Button_load_clicked();
 
+    void on_ComboBox_universe_mode_activated(int index);
+
 private:
     Ui::MainWindow *ui;
 };

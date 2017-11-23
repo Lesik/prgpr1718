@@ -1,6 +1,7 @@
 /*
     Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
+
 #ifndef CABASE_H
 #define CABASE_H
 
@@ -8,10 +9,13 @@
 class CAbase
 {
 private:
+    enum GameType { Snake, GameOfLife };
+    GameType game;
     int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
-    void createWorld();
+    void startGameOfLife();
+    void startSnake();
     void populateRandomly();
     void populate_test();
     int getIndexByCoord(int x, int y);
@@ -42,6 +46,11 @@ public:
 
     void print();
     void evolve();
+
+    void onUp();
+    void onLeft();
+    void onDown();
+    void onRight();
 };
 
 #endif // CABASE_H

@@ -1,6 +1,7 @@
 /*
     Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
+
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
 
@@ -32,6 +33,7 @@ public slots:
     void newGeneration();
     void saveToFile();
     void loadFromFile();
+    void keyPressEvent(QKeyEvent *event);
 
 private:                    // Private Variablen
     QTimer *timer;

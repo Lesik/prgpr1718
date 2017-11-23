@@ -141,7 +141,18 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QComboBox" name="ComboBox_universe_mode"/>
+      <widget class="QComboBox" name="ComboBox_universe_mode">
+       <item>
+        <property name="text">
+         <string>Game of Life</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Snake</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item row="8" column="1">
       <widget class="QLabel" name="Label_generation_intervall">

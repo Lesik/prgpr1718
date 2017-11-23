@@ -1,6 +1,7 @@
 /*
     Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
+
 #include <iostream>
 #include <cstdlib>
 #include "cabase.h"
@@ -11,7 +12,7 @@ using namespace std;
  * Constructor – set
  */
 CAbase::CAbase() {}
-CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; createWorld(); populate_test(); }
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; startGameOfLife(); populate_test(); }
 
 /*
  * Empty deconstructor
@@ -21,8 +22,9 @@ CAbase::~CAbase() {}
 // gibt Position des Elementes im Array zurück
 int CAbase::getIndexByCoord(int x, int y) {return x + worldHeight * y;}
 
-void CAbase::createWorld()      // Erstellt leere Welt
+void CAbase::startGameOfLife()      // Erstellt leere Welt
 {
+    game = GameOfLife;
     currentworld = new int[worldWidth * worldHeight];
     nextgenworld = new int[worldWidth * worldHeight];
     for (int x = 0; x < worldWidth; x++) {
@@ -31,6 +33,10 @@ void CAbase::createWorld()      // Erstellt leere Welt
                 nextgenworld[getIndexByCoord(x, y)] = 0;
         }
     }
+}
+
+void CAbase::startSnake() {
+    game = Snake;
 }
 
 void CAbase::populateRandomly()     // Fühlt die Welt mit Random lebenden Zellen
@@ -198,4 +204,14 @@ void CAbase::evolve()           // Evolutionsstufe wird um 1 erhöht
     for (int y = 0; y < worldHeight; y++)       // Überschreiben
         for (int x = 0; x < worldWidth; x++)
             currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
+}
+
+void CAbase::onUp()
+{
+
+}
+
+void CAbase::onLeft()
+{
+
 }

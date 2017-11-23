@@ -1,6 +1,7 @@
 /*
     Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
+
 #include "gamewidget.h"
 #include <QTimer>
 #include <QMouseEvent>
@@ -139,4 +140,27 @@ void GameWidget::loadFromFile() {
         }
     }
     myFile.close();
+}
+
+void GameWidget::changeGame(int index) {
+    switch (index) {
+    case 0:
+        ca.startGameOfLife();
+        break;
+    case 1:
+        ca.startSnake();
+        break;
+    }
+}
+
+void GameWidget::keyPressEvent(QKeyEvent *event) {
+   if (event->key() == Qt::Key_W) {
+       // up
+   } else if (event->key() == Qt::Key_A) {
+       // left
+   } else if (event->key() == Qt::Key_S) {
+       // up
+   } else if (event->key() == Qt::Key_D) {
+       // right
+   }
 }

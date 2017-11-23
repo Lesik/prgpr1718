@@ -7,8 +7,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    game(new GameWidget(this))
+    game(new GameWidget(this)),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->gridLayout->addWidget(game);
@@ -24,3 +24,14 @@ void MainWindow::on_SpinBox_universe_size_valueChanged(int arg1) {game->setUnive
 void MainWindow::on_SpinBox_generation_intervall_valueChanged(int arg1) {game->setTimerIntervall(arg1);}
 void MainWindow::on_Button_save_clicked() {game->saveToFile();}
 void MainWindow::on_Button_load_clicked() {game->loadFromFile();}
+
+void MainWindow::on_ComboBox_universe_mode_activated(int index)
+{
+    switch (index) {
+    case 0:
+        game->start
+        break;
+    default:
+        break;
+    }
+}
