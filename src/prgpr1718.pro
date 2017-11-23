@@ -32,7 +32,7 @@ SOURCES += \
 HEADERS += \
         mainwindow.h \
     gamewidget.h \
-    CAbase.h
+    cabase.h
 
 FORMS += \
         mainwindow.ui

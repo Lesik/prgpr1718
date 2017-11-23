@@ -1,8 +1,5 @@
 /*
-    Fatih (6251581), Javi (), Lesik (6081100), Kelvin Tsang (5428328)
-
-    Milestone 1
-
+    Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
 #ifndef GAMEWIDGET_H
 #define GAMEWIDGET_H
@@ -11,7 +8,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QWidget>
-#include "CAbase.h"
+#include "cabase.h"
 
 class GameWidget : public QWidget
 {

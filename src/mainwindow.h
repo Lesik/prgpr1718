@@ -1,9 +1,7 @@
 /*
-    Fatih (6251581), Javi (), Lesik (6081100), Kelvin Tsang (5428328)
-
-    Milestone 1
-
+    Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
