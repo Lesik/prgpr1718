@@ -25,13 +25,6 @@ void MainWindow::on_SpinBox_generation_intervall_valueChanged(int arg1) {game->s
 void MainWindow::on_Button_save_clicked() {game->saveToFile();}
 void MainWindow::on_Button_load_clicked() {game->loadFromFile();}
 
-void MainWindow::on_ComboBox_universe_mode_activated(int index)
-{
-    switch (index) {
-    case 0:
-        game->start
-        break;
-    default:
-        break;
-    }
+void MainWindow::on_ComboBox_universe_mode_activated(int index) {
+    game->changeGame(index);
 }

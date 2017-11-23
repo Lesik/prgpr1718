@@ -22,67 +22,43 @@ CAbase::~CAbase() {}
 // gibt Position des Elementes im Array zurück
 int CAbase::getIndexByCoord(int x, int y) {return x + worldHeight * y;}
 
-void CAbase::startGameOfLife()      // Erstellt leere Welt
-{
-    game = GameOfLife;
+void CAbase::changeGame(int index) {
+    switch (index) {
+    case 0:
+        game = GameOfLife;
+        break;
+    case 1:
+        game = Snake;
+        break;
+    }
+}
+
+void CAbase::generate() {
     currentworld = new int[worldWidth * worldHeight];
     nextgenworld = new int[worldWidth * worldHeight];
-    for (int x = 0; x < worldWidth; x++) {
-        for (int y = 0; y < worldHeight; y++) {
-                currentworld[getIndexByCoord(x, y)] = 0;
-                nextgenworld[getIndexByCoord(x, y)] = 0;
+
+    if (game == GameOfLife) {
+        for (int x = 0; x < worldWidth; x++) {
+            for (int y = 0; y < worldHeight; y++) {
+                    currentworld[getIndexByCoord(x, y)] = 0;
+                    nextgenworld[getIndexByCoord(x, y)] = 0;
+            }
+        }
+    } else if (game == Snake) {
+        for (int x = 0; x < worldWidth; x++) {
+            for (int y = 0; y < worldHeight; y++) {
+                    currentworld[getIndexByCoord(x, y)] = 0;
+                    nextgenworld[getIndexByCoord(x, y)] = 0;
+            }
         }
     }
-}
-
-void CAbase::startSnake() {
-    game = Snake;
-}
-
-void CAbase::populateRandomly()     // Fühlt die Welt mit Random lebenden Zellen
-{
-    for (int x = 0; x < worldWidth; x++) {
-        for (int y = 0; y < worldHeight; y++) {
-                currentworld[getIndexByCoord(x, y)] = rand() % 2;
-        }
-    }
-}
-
-void CAbase::populate_test()        // Testwelt
-{
-    for (int x = 0; x < worldWidth; x++) {
-        for (int y = 0; y < worldHeight; y++) {
-                currentworld[getIndexByCoord(x, y)] = 0;
-        }
-    }
-    currentworld[getIndexByCoord(0, 0)] = 1;
-    currentworld[getIndexByCoord(29, 29)] = 1;
-    currentworld[getIndexByCoord(0, 3)] = 1;
-    currentworld[getIndexByCoord(0, 4)] = 1;
-    currentworld[getIndexByCoord(0, 5)] = 1;
-    // blinker
-    currentworld[getIndexByCoord(4, 4)] = 1;
-    currentworld[getIndexByCoord(5, 4)] = 1;
-    currentworld[getIndexByCoord(6, 4)] = 1;
-    //rechteck
-    currentworld[getIndexByCoord(12, 12)] = 1;
-    currentworld[getIndexByCoord(12, 13)] = 1;
-    currentworld[getIndexByCoord(13, 12)] = 1;
-    currentworld[getIndexByCoord(13, 13)] = 1;
 }
 
 void CAbase::setSize(int x, int y) // Erstellt die Größe des Feldes
 {
     worldWidth = x;
     worldHeight = y;
-    currentworld = new int[x * y];
-    nextgenworld = new int[x * y];
-    for (int x = 0; x < worldWidth; x++) {
-        for (int y = 0; y < worldHeight; y++) {
-                currentworld[getIndexByCoord(x, y)] = 0;
-                nextgenworld[getIndexByCoord(x, y)] = 0;
-        }
-    }
+    generate();
 }
 
 // Setzt wert auf Zelle (x,y)

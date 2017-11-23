@@ -14,10 +14,7 @@ private:
     int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
-    void startGameOfLife();
-    void startSnake();
-    void populateRandomly();
-    void populate_test();
+    void generate();
     int getIndexByCoord(int x, int y);
 
 public:
@@ -38,7 +35,6 @@ public:
     int getCell(int x, int y);
     int* getCurrentWorld();
     int* getNextGenWorld();
-
 
 // 'Spiel des Lebens' - Regeln / Methoden
     int nachbar(int x, int y);

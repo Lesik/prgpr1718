@@ -21,6 +21,7 @@ public:
     void paintEvent(QPaintEvent *);
     void paintGrid();
     void paintUniverse();
+    void changeGame(int index);
 
 signals:
 
