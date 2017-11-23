@@ -57,6 +57,7 @@ void CAbase::generate() {
         currentX = 2;
         currentY = 2;
         currentworld[getIndexByCoord(currentX, currentY)] = 1;
+        direction = Down;
     }
 }
 
@@ -186,15 +187,17 @@ void CAbase::evolve() {
             currentX += 1;
             break;
         }
-        currentworld[getIndexByCoord(currentX, currentY)] = length + 2;
 
         for (int y = 0; y < worldHeight; y++) {
             for (int x = 0; x < worldWidth; x++) {
                 int value = currentworld[getIndexByCoord(x, y)];
-                if (value > 0)
+                if (value > 0) {
                     currentworld[getIndexByCoord(x, y)]--;
+                }
             }
         }
+
+        currentworld[getIndexByCoord(currentX, currentY)] = length;
         break;
     }
 }

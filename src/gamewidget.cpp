@@ -145,13 +145,19 @@ void GameWidget::changeGame(int index) {
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {
-   if (event->key() == Qt::Key_W) {
-       ca.onUp();
-   } else if (event->key() == Qt::Key_A) {
-       ca.onLeft();
-   } else if (event->key() == Qt::Key_S) {
-       ca.onDown();
-   } else if (event->key() == Qt::Key_D) {
-       ca.onRight();
-   }
+    switch (event->key()) {
+    case Qt::Key_W:
+        ca.onUp();
+        break;
+    case Qt::Key_A:
+        ca.onLeft();
+        break;
+    case Qt::Key_S:
+        ca.onDown();
+        break;
+    case Qt::Key_D:
+        ca.onRight();
+        break;
+    }
+    newGeneration();
 }

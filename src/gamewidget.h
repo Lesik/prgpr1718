@@ -16,12 +16,15 @@ class GameWidget : public QWidget
     Q_OBJECT
 public:
     explicit GameWidget(QWidget *parent = nullptr);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *);
     void paintGrid();
     void paintUniverse();
     void changeGame(int index);
+
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *) override;
+    void keyPressEvent(QKeyEvent *event) override;
 
 signals:
 
@@ -34,7 +37,6 @@ public slots:
     void newGeneration();
     void saveToFile();
     void loadFromFile();
-    void keyPressEvent(QKeyEvent *event);
 
 private:                    // Private Variablen
     QTimer *timer;
