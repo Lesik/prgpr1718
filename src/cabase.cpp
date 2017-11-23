@@ -12,7 +12,7 @@ using namespace std;
  * Constructor – set
  */
 CAbase::CAbase() {}
-CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; generate(); }
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; changeGame(GameOfLife); }
 
 /*
  * Empty deconstructor
@@ -31,6 +31,7 @@ void CAbase::changeGame(int index) {
         game = Snake;
         break;
     }
+    generate();
 }
 
 void CAbase::generate() {
@@ -53,6 +54,9 @@ void CAbase::generate() {
                     nextgenworld[getIndexByCoord(x, y)] = 0;
             }
         }
+        currentX = 2;
+        currentY = 2;
+        currentworld[getIndexByCoord(currentX, currentY)] = 1;
     }
 }
 
@@ -68,11 +72,16 @@ void CAbase::setCell(int x, int y, int wert) {currentworld[x + worldHeight * y] 
 void CAbase::setCell_next(int x, int y, int wert) {nextgenworld[x + worldHeight * y] = wert;}
 
 // Definition der Getter
-int CAbase::getCell(int x, int y) {return currentworld[x + worldHeight * y];}
+int CAbase::getCell(int x, int y) {
+    switch (game) {
+    case GameOfLife:
+        return currentworld[getIndexByCoord(x, y)] == 1;
+    case Snake:
+        return currentworld[getIndexByCoord(x, y)] != 0;
+    }
+}
 int CAbase::getNx() {return worldWidth;}
 int CAbase::getNy() {return worldHeight;}
-int* CAbase::getCurrentWorld() {return currentworld;}
-int* CAbase::getNextGenWorld() {return nextgenworld;}
 
 int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,y)
 {
@@ -124,35 +133,6 @@ int CAbase::nachbar(int x, int y) // Zählt die Anzahl der Nachbarn vom Feld (x,
     }
 }
 
-// Gibt die aktuelle Welt im Terminal an
-void CAbase::print() {
-    cout << ". ";
-    for (int j = 0; j < worldWidth; j++) {
-        cout << " . ";
-    }
-    cout << " .";
-    cout << endl;
-    for (int i = 0; i < worldHeight; i++) {
-        cout << ". ";
-        for (int k = 0; k < worldWidth; k++) {
-            if (currentworld[getIndexByCoord(k, i)] == 1) {
-                cout << " * ";
-            }
-            else {
-                cout << "   ";
-            }
-        }
-        cout << " .";
-        cout << endl;
-    }
-    cout << ". ";
-    for (int j = 0; j < worldWidth; j++) {
-        cout << " . ";
-    }
-    cout << " .";
-    cout << endl;
-}
-
 // Regel des Spiels
 void CAbase::regel(int x, int y)
 {
@@ -173,6 +153,12 @@ void CAbase::regel(int x, int y)
     }
 }
 
+void CAbase::clicked(int x, int y)
+{
+    if (game == GameOfLife)
+        setCell(x, y, !getCell(x, y));
+}
+
 void CAbase::evolve() {
     switch (game) {
     case GameOfLife:
@@ -185,16 +171,35 @@ void CAbase::evolve() {
                 currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
         break;
     case Snake:
+        int length = currentworld[getIndexByCoord(currentX, currentY)];
+        switch (direction) {
+        case Up:
+            currentY -= 1;
+            break;
+        case Left:
+            currentX -= 1;
+            break;
+        case Down:
+            currentY += 1;
+            break;
+        case Right:
+            currentX += 1;
+            break;
+        }
+        currentworld[getIndexByCoord(currentX, currentY)] = length + 2;
+
+        for (int y = 0; y < worldHeight; y++) {
+            for (int x = 0; x < worldWidth; x++) {
+                int value = currentworld[getIndexByCoord(x, y)];
+                if (value > 0)
+                    currentworld[getIndexByCoord(x, y)]--;
+            }
+        }
         break;
     }
 }
 
-void CAbase::onUp()
-{
-
-}
-
-void CAbase::onLeft()
-{
-
-}
+void CAbase::onUp() { direction = Up; }
+void CAbase::onLeft() { direction = Left; }
+void CAbase::onDown() { direction = Down; }
+void CAbase::onRight() { direction = Right; }

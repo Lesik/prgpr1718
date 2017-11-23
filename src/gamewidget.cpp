@@ -70,35 +70,32 @@ void GameWidget::mouseMoveEvent(QMouseEvent *event) {
 // wird ausgefuert wenn update() ausgefuehrt wurde
 void GameWidget::paintEvent(QPaintEvent *)
 {
-    paintGrid();
-    paintUniverse();
-}
-
-// auf das widget wird ein Raster gezeichnet, indem Linien horizontal und vertikal
-// gezeichnet werden. Am Ende zeichnet es einen Rechteck am Rand.
-void GameWidget::paintGrid()
-{
+    // initiate painter
     QPainter painter(this);
-    QRect rec(0, 0, 580, 580);
-    double cellGeometry = 580.00 / universeSize;
-    for(double i = 0; i <= 580.00; i += cellGeometry) {
-        painter.drawLine(i, 0, i, 580.00);
-        painter.drawLine(0, i, 580.00, i);
-    }
-    painter.drawRect(rec);
-}
+    painter.setPen(Qt::darkGreen);
+    // calculate cell dimensions
+    double cellWidth = (double) width() / ca.getNx();
+    double cellHeight = (double) height() / ca.getNy();
+    // draw cell dividers
+    for (double i = cellWidth; i <= width(); i += cellWidth)
+        painter.drawLine(i, 0, i, height());
+    for (double i = cellHeight; i <= height(); i += cellHeight)
+        painter.drawLine(0, i, width(), i);
 
-// zeichnet die lebenden Zellen, indem es einen schwarz gefuellten Quadrat
-// an die Position zeichnet
-void GameWidget::paintUniverse() {
-    QPainter painter(this);
-    double cellGeometry = 580.00 / universeSize;
-    for(int j = 0; j < universeSize; j++) {
-        for(int i = 0; i < universeSize; i++) {
-            if(ca.getCell(i, j) == 1) {
-                // QRectF weil es double nimmt, somit praeziser
-                QRectF rec(i * cellGeometry, j * cellGeometry, cellGeometry, cellGeometry);
-                painter.fillRect(rec, Qt::black);                   // Zelle wird schwarz gefüllt
+    // draw border from x = 0, y = 0 to x = width - 1, y = height - 1
+    QRect borders(0, 0, width() - 1, height() - 1);
+    painter.drawRect(borders);
+
+    // for each cell in world, if is alive
+    for (int x = 0; x < ca.getNx(); x++) {
+        for (int y = 0; y < ca.getNy(); y++) {
+            if (ca.getCell(x, y)) {
+                // calculate left and top edges by calculating distance from top left edge
+                qreal left = (qreal) (cellWidth * x);
+                qreal top = (qreal) (cellHeight * y);
+                // the cell should be cellWidth wide and cellHeight tall
+                QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+                painter.fillRect(r, Qt::darkBlue);
             }
         }
     }
@@ -135,7 +132,7 @@ void GameWidget::loadFromFile() {
         // jede Zeile wird durchgegangen und zu seiner Position im Array hinzugefügt
         while(!in.atEnd()) {    
             QString line = in.readLine();
-            ca.getCurrentWorld()[i] = line.toInt();                 // Spielfeld wird gelesen und geladen
+            //ca.getCurrentWorld()[i] = line.toInt();                 // Spielfeld wird gelesen und geladen
             i++;
         }
     }
@@ -143,16 +140,18 @@ void GameWidget::loadFromFile() {
 }
 
 void GameWidget::changeGame(int index) {
+    ca.changeGame(index);
+    update();
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {
    if (event->key() == Qt::Key_W) {
-       // up
+       ca.onUp();
    } else if (event->key() == Qt::Key_A) {
-       // left
+       ca.onLeft();
    } else if (event->key() == Qt::Key_S) {
-       // up
+       ca.onDown();
    } else if (event->key() == Qt::Key_D) {
-       // right
+       ca.onRight();
    }
 }

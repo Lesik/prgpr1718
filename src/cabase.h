@@ -11,12 +11,15 @@ class CAbase
 private:
     enum GameType { Snake, GameOfLife };
     GameType game;
+    enum Direction { Up, Left, Down, Right };
+    Direction direction;
     int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
-    void changeGame(int index);
     void generate();
     int getIndexByCoord(int x, int y);
+    int currentX;
+    int currentY;
 
 public:
     // Konstruktoren
@@ -34,16 +37,16 @@ public:
     int getNx();
     int getNy();
     int getCell(int x, int y);
-    int* getCurrentWorld();
-    int* getNextGenWorld();
 
 // 'Spiel des Lebens' - Regeln / Methoden
     int nachbar(int x, int y);
     void regel(int x, int y);
+    void clicked(int x, int y);
 
     void print();
     void evolve();
 
+    void changeGame(int index);
     void onUp();
     void onLeft();
     void onDown();
