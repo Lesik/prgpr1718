@@ -3,7 +3,6 @@
 #include <QWidget>
 
 #include "snake.h"
-#include "cabase.h"
 
 Snake::Snake(QWidget *parent) :
     QWidget(parent)
@@ -35,9 +34,7 @@ void Snake::paintFood(QPaintEvent *) {
 
 // Aufgabe 2
 void Snake::PrepareFieldSnake() {
-    for (int x = 0; x < ws.y(); x++) {
-        currentworld[x] = new int[ws.y()];
-        nextgenworld[x] = new int[ws.y()];
+    for (int x = 0; x < ws.x(); x++) {
         for (int y = 0; y < ws.y(); y++) {
             currentworld[x][y] = 0;
             nextgenworld[x][y] = 0;
@@ -55,6 +52,11 @@ void Snake::generateWorld(int worldX, int worldY) {
     ws.setY(worldY);
     //cs.setX(width() / ws.x());
     //cs.setY(height() / ws.y());
+
+    for (int i = 0; i < ws.x(); i++) {
+        currentworld[i] = new int[ws.y()];
+        nextgenworld[i] = new int[ws.y()];
+    }
 
     PrepareFieldSnake();
 }
@@ -91,7 +93,7 @@ void Snake::evolve() {
         case Left:  onLeft(); break;
         case Down:  onDown(); break;
         case Right: onRight(); break;
-        case Stop: return; break;
+        case Stop:  return; break;
     }
     collision();
 }
@@ -100,32 +102,13 @@ void Snake::eatFood() {
     if (head == food) {
         // tail wird vergrößert
     }
+    // neues Essen wird generiert
     generateFood();
 }
 
 void Snake::paintEvent(QPaintEvent *event) {
     paintHead(event);
     paintFood(event);
-}
-
-// keyPressEvent muss in gamewidget.h/cpp
-void Snake::keyPressEvent(QKeyEvent *event) {
-    switch (event->key()) {
-        case Qt::Key_Up:    setDirection(Up); break;
-        case Qt::Key_Left:  setDirection(Left); break;
-        case Qt::Key_Down:  setDirection(Down); break;
-        case Qt::Key_Right: setDirection(Right); break;
-
-        case Qt::Key_W:     setDirection(Up); break;
-        case Qt::Key_A:     setDirection(Left); break;
-        case Qt::Key_S:     setDirection(Down); break;
-        case Qt::Key_D:     setDirection(Right); break;
-
-        case Qt::Key_8:     setDirection(Up); break;
-        case Qt::Key_4:     setDirection(Left); break;
-        case Qt::Key_2:     setDirection(Down); break;
-        case Qt::Key_6:     setDirection(Right); break;
-    }
 }
 
 void Snake::onUp() {

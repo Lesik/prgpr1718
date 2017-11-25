@@ -29,7 +29,6 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    void keyPressEvent(QKeyEvent *event) override;
     void onUp();
     void onLeft();
     void onDown();

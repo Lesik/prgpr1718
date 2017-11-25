@@ -11,6 +11,7 @@
 #include <QWidget>
 
 #include "cabase.h"
+#include "snake.h"
 
 class GameWidget : public QWidget
 {
@@ -44,7 +45,9 @@ private:                    // Private Variablen
     QTimer *timer;
     QColor colour;
     int universeSize;
+
     CAbase ca;              // CAbase aus vorherigen Aufgaben
+    Snake snake;
 };
 
 #endif // GAMEWIDGET_H
