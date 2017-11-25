@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "cabase.h"
+#include "snake.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ void CAbase::changeGame(int index) {
         game = GameOfLife;
         break;
     case 1:
-        game = Snake;
+        game = GameSnake;
         break;
     }
     generate();
@@ -47,7 +48,8 @@ void CAbase::generate() {
             }
         }
         break;
-    case Snake:
+    case GameSnake:
+
         for (int x = 0; x < worldWidth; x++) {
             for (int y = 0; y < worldHeight; y++) {
                     currentworld[getIndexByCoord(x, y)] = 0;
@@ -58,6 +60,8 @@ void CAbase::generate() {
         currentY = 2;
         currentworld[getIndexByCoord(currentX, currentY)] = 1;
         direction = Down;
+
+        //snake.generateWorld(worldWidth, worldHeight);
     }
 }
 
@@ -77,8 +81,10 @@ int CAbase::getCell(int x, int y) {
     switch (game) {
     case GameOfLife:
         return currentworld[getIndexByCoord(x, y)] == 1;
-    case Snake:
+
+    case GameSnake:
         return currentworld[getIndexByCoord(x, y)] != 0;
+
     }
 }
 int CAbase::getNx() {return worldWidth;}
@@ -171,7 +177,8 @@ void CAbase::evolve() {
             for (int x = 0; x < worldWidth; x++)
                 currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
         break;
-    case Snake:
+    case GameSnake:
+
         int length = currentworld[getIndexByCoord(currentX, currentY)];
         switch (direction) {
         case Up:
@@ -199,6 +206,8 @@ void CAbase::evolve() {
 
         currentworld[getIndexByCoord(currentX, currentY)] = length;
         break;
+
+        //snake.evolve();
     }
 }
 

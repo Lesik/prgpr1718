@@ -67,15 +67,10 @@ void GameWidget::mouseMoveEvent(QMouseEvent *event) {
     update();
 }
 
-// wird ausgefuert wenn update() ausgefuehrt wurde
-void GameWidget::paintEvent(QPaintEvent *)
-{
+void GameWidget::paintGrid(QPaintEvent *, double cellWidth, double cellHeight) {
     // initiate painter
     QPainter painter(this);
     painter.setPen(Qt::darkGreen);
-    // calculate cell dimensions
-    double cellWidth = (double) width() / ca.getNx();
-    double cellHeight = (double) height() / ca.getNy();
     // draw cell dividers
     for (double i = cellWidth; i <= width(); i += cellWidth)
         painter.drawLine(i, 0, i, height());
@@ -85,11 +80,21 @@ void GameWidget::paintEvent(QPaintEvent *)
     // draw border from x = 0, y = 0 to x = width - 1, y = height - 1
     QRect borders(0, 0, width() - 1, height() - 1);
     painter.drawRect(borders);
+}
 
+// wird ausgefuert wenn update() ausgefuehrt wurde
+void GameWidget::paintEvent(QPaintEvent *event)
+{
+    double cellWidth = (double) width() / ca.getNx();
+    double cellHeight = (double) height() / ca.getNy();
+    paintGrid(event, cellWidth, cellHeight);
+
+    // initiate painter
+    QPainter painter(this);
     // for each cell in world, if is alive
     for (int x = 0; x < ca.getNx(); x++) {
         for (int y = 0; y < ca.getNy(); y++) {
-            if (ca.getCell(x, y)) {
+            if (ca.getCell(x, y)==1) {
                 // calculate left and top edges by calculating distance from top left edge
                 qreal left = (qreal) (cellWidth * x);
                 qreal top = (qreal) (cellHeight * y);

@@ -9,6 +9,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <QWidget>
+
 #include "cabase.h"
 
 class GameWidget : public QWidget
@@ -16,14 +17,13 @@ class GameWidget : public QWidget
     Q_OBJECT
 public:
     explicit GameWidget(QWidget *parent = nullptr);
-    void paintGrid();
     void paintUniverse();
     void changeGame(int index);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
 
 signals:
@@ -37,6 +37,8 @@ public slots:
     void newGeneration();
     void saveToFile();
     void loadFromFile();
+
+    void paintGrid(QPaintEvent *, double cellWidth, double cellHeight);
 
 private:                    // Private Variablen
     QTimer *timer;

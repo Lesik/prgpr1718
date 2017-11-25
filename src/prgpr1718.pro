@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     gamewidget.cpp \
-    cabase.cpp
+    cabase.cpp \
+    snake.cpp
 
 HEADERS += \
         mainwindow.h \
     gamewidget.h \
-    cabase.h
+    cabase.h \
+    snake.h
 
 FORMS += \
         mainwindow.ui

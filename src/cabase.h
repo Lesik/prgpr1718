@@ -1,16 +1,18 @@
 /*
     Javi (), Lesik (6082200), Kelvin Tsang (5428328)
 */
-
 #ifndef CABASE_H
 #define CABASE_H
+
+#include "snake.h"
 
 // Klasse CAbase wird definiert
 class CAbase
 {
 private:
-    enum GameType { Snake, GameOfLife };
+    enum GameType { GameSnake, GameOfLife };
     GameType game;
+    Snake snake;
     enum Direction { Up, Left, Down, Right };
     Direction direction;
     int worldWidth, worldHeight;                 // Membervariable
@@ -51,6 +53,8 @@ public:
     void onLeft();
     void onDown();
     void onRight();
+
+
 };
 
 #endif // CABASE_H
