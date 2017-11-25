@@ -45,6 +45,9 @@ void Snake::PrepareFieldSnake() {
     }
     head.setX((int)(ws.x() / 2));
     head.setY((int)(ws.y() / 2));
+    headDirection = Up;
+    currentworld[head.x()][head.y()] = 1;
+    generateFood();
 }
 
 void Snake::generateWorld(int worldX, int worldY) {
@@ -53,22 +56,7 @@ void Snake::generateWorld(int worldX, int worldY) {
     //cs.setX(width() / ws.x());
     //cs.setY(height() / ws.y());
 
-    currentworld = new int*[ws.x()];
-    nextgenworld = new int*[ws.x()];
-    for (int x = 0; x < ws.y(); x++) {
-        currentworld[x] = new int[ws.y()];
-        nextgenworld[x] = new int[ws.y()];
-        for (int y = 0; y < ws.y(); y++) {
-            currentworld[x][y] = 0;
-            nextgenworld[x][y] = 0;
-        }
-    }
-    head.setX((int)(ws.x() / 2));
-    head.setY((int)(ws.y() / 2));
-    headDirection = Up;
-    currentworld[head.x()][head.y()] = 1;
-    generateFood();
-
+    PrepareFieldSnake();
 }
 
 void Snake::generateFood() {
