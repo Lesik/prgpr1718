@@ -32,7 +32,7 @@ void Snake::paintFood(QPaintEvent *) {
     painter.fillRect(r, Qt::red); // Farbe des Essens
 }
 
-// Aufgabe 2
+// Aufgabe 2)
 void Snake::PrepareFieldSnake() {
     for (int x = 0; x < ws.x(); x++) {
         for (int y = 0; y < ws.y(); y++) {
@@ -45,6 +45,7 @@ void Snake::PrepareFieldSnake() {
     head.setY((int)(ws.y() / 2));
     headDirection = Up;
     currentworld[head.x()][head.y()] = 8;
+    head = tail;
     generateFood();
 }
 
@@ -70,6 +71,7 @@ void Snake::generateFood() {
     } while (head != food);
 }
 
+// Aufgabe 3b)
 void Snake::setDirection(Direction direction) {
     if(headDirection == Up && direction == Down)
         return;
@@ -86,8 +88,9 @@ Snake::Direction Snake::getDirection() {
     return headDirection;
 }
 
-// Aufgabe 1
+// Aufgabe 1)
 void Snake::evolve() {
+    // Aufgabe 1b)
     if (head.x() < 0 || head.x() > ws.x()) headDirection = Stop;
     if (head.y() < 0 || head.y() > ws.y()) headDirection = Stop;
     switch (headDirection) {
@@ -102,7 +105,8 @@ void Snake::evolve() {
 
 void Snake::eatFood() {
     if (head == food) {
-        // tail wird vergrößert
+        length++;
+        // body wird vergrößert
     }
     // neues Essen wird generiert
     generateFood();
@@ -115,32 +119,45 @@ void Snake::paintEvent(QPaintEvent *event) {
 
 void Snake::onUp() {
     currentworld[head.x()][head.y()-1] = 8;
-    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
+    body();
     head.ry() -= 1;
 }
 
 void Snake::onLeft() {
     currentworld[head.x()-1][head.y()] = 4;
-    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
+    body();
     head.rx() -= 1;
 }
 
 void Snake::onDown() {
     currentworld[head.x()][head.y()+1] = 2;
-    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
+    body();
     head.ry() += 1;
 }
 
 void Snake::onRight() {
     currentworld[head.x()+1][head.y()] = 6;
-    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
+    body();
     head.rx() += 1;
 }
 
-void Snake::collision() {
+void Snake::body() {
+    if (head != food)
+        currentworld[tail.x()][tail.y()] = 0;
+}
 
+// Aufgabe 3d)
+void Snake::collision() {
+    //Kollision mit Essen
+    eatFood();
+    int x = head.x();
+    int y = head.y();
+    // Kollision mit Wand
+    if (x < 0 || x > ws.x()) gameOver();
+    if (y < 0 || y > ws.y()) gameOver();
+    // Kollision mit sich selbst
 }
 
 void Snake::gameOver() {
-
+    // Timer muss disconnectet werden
 }

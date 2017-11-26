@@ -34,6 +34,8 @@ private:
     void onDown();
     void onRight();
 
+    void body();
+
     void collision();
     void gameOver();
 
@@ -45,6 +47,8 @@ private:
     QPointF cs; //cellSize
 
     QPoint head;
+    QPoint tail;
+    int length; // snake length
     QPoint food;
     Direction headDirection;
 };
