@@ -11,7 +11,7 @@ class Snake : public QWidget
 public:
     Snake(QWidget *parent = nullptr);
 
-    void paintHead(QPaintEvent *);
+    void paintSnake(QPaintEvent *);
     void paintFood(QPaintEvent *);
 
     void PrepareFieldSnake();
@@ -37,6 +37,7 @@ private:
     void collision();
     void gameOver();
 
+    // 2-dim dynm Array
     int** currentworld;
     int** nextgenworld;
 

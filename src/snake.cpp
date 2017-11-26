@@ -9,15 +9,15 @@ Snake::Snake(QWidget *parent) :
 {
 }
 
-void Snake::paintHead(QPaintEvent *) {
+void Snake::paintSnake(QPaintEvent *) {
     QPainter painter(this);
     for (int x = 0; x < ws.x(); x++) {
         for (int y = 0; y < ws.y(); y++) {
-            if(currentworld[x][y] != 0) {
+            if(currentworld[x][y] != 0) { // Füllt alle Felder != 0
                 qreal left  = cs.x() * x;
                 qreal top   = cs.y() * y;
                 QRectF r(left, top, cs.x(), cs.y());
-                painter.fillRect(r, Qt::darkBlue); //Farbe für Kästchen
+                painter.fillRect(r, Qt::darkBlue); //Farbe für Felder
             }
         }
     }
@@ -29,7 +29,7 @@ void Snake::paintFood(QPaintEvent *) {
     qreal left  = cs.x() * food.x();
     qreal top   = cs.y() * food.y();
     QRectF r(left, top, cs.x(), cs.y());
-    painter.fillRect(r, Qt::red);
+    painter.fillRect(r, Qt::red); // Farbe des Essens
 }
 
 // Aufgabe 2
@@ -40,16 +40,18 @@ void Snake::PrepareFieldSnake() {
             nextgenworld[x][y] = 0;
         }
     }
+    // Kopf wird mitten ins Spielfeld gesetzt mit Richtung oben
     head.setX((int)(ws.x() / 2));
     head.setY((int)(ws.y() / 2));
     headDirection = Up;
-    currentworld[head.x()][head.y()] = 1;
+    currentworld[head.x()][head.y()] = 8;
     generateFood();
 }
 
 void Snake::generateWorld(int worldX, int worldY) {
     ws.setX(worldX);
     ws.setY(worldY);
+    // Zellengröße soll ausgerechnet werden
     //cs.setX(width() / ws.x());
     //cs.setY(height() / ws.y());
 
@@ -107,31 +109,31 @@ void Snake::eatFood() {
 }
 
 void Snake::paintEvent(QPaintEvent *event) {
-    paintHead(event);
+    paintSnake(event);
     paintFood(event);
 }
 
 void Snake::onUp() {
     currentworld[head.x()][head.y()-1] = 8;
-    currentworld[head.x()][head.y()] = 0;
+    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
     head.ry() -= 1;
 }
 
 void Snake::onLeft() {
     currentworld[head.x()-1][head.y()] = 4;
-    currentworld[head.x()][head.y()] = 0;
+    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
     head.rx() -= 1;
 }
 
 void Snake::onDown() {
     currentworld[head.x()][head.y()+1] = 2;
-    currentworld[head.x()][head.y()] = 0;
+    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
     head.ry() += 1;
 }
 
 void Snake::onRight() {
     currentworld[head.x()+1][head.y()] = 6;
-    currentworld[head.x()][head.y()] = 0;
+    currentworld[head.x()][head.y()] = 0; // Fnk braucht man nicht mehr, wenn tail
     head.rx() += 1;
 }
 
