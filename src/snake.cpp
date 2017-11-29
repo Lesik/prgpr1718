@@ -23,9 +23,10 @@ int Snake::getFoodCoordY() {
 
 // Aufgabe 2)
 void Snake::PrepareFieldSnake() {
+    memset(currentworld, 0, sizeof(currentworld[0][0]) * SIZE * SIZE);
     // Kopf wird mitten ins Spielfeld gesetzt mit Richtung oben
-    head.setX((int)(ws.x() / 2));
-    head.setY((int)(ws.y() / 2));
+    head.setX((int)(SIZE / 2));
+    head.setY((int)(SIZE / 2));
     headDirection = Up;
     currentworld[head.x()][head.y()] = 8;
     head = tail;
@@ -33,20 +34,11 @@ void Snake::PrepareFieldSnake() {
     generateFood();
 }
 
-void Snake::generateWorld(int worldX, int worldY) {
-    ws.setX(30);
-    ws.setY(30);
-
-    memset(currentworld, 0, sizeof(currentworld[0][0]) * 30 * 30);
-
-    PrepareFieldSnake();
-}
-
 void Snake::generateFood() {
     do {
         // arithmetic exception
-        food.setX(rand() % ws.x());
-        food.setY(rand() % ws.y());
+        food.setX(rand() % SIZE);
+        food.setY(rand() % SIZE);
     } while (head != food);
 }
 
@@ -139,8 +131,8 @@ void Snake::collision() {
     int x = head.x();
     int y = head.y();
     // Kollision mit Wand
-    if (x < 0 || x > ws.x()) gameOver();
-    if (y < 0 || y > ws.y()) gameOver();
+    if (x < 0 || x > SIZE) gameOver();
+    if (y < 0 || y > SIZE) gameOver();
     // Kollision mit sich selbst
 }
 

@@ -76,14 +76,7 @@ void CAbase::setCell_next(int x, int y, int wert) {nextgenworld[x + worldHeight 
 
 // Definition der Getter
 int CAbase::getCell(int x, int y) {
-    switch (game) {
-    case GameOfLife:
-        return currentworld[getIndexByCoord(x, y)] == 1;
-
-    case GameSnake:
-        return currentworld[getIndexByCoord(x, y)] != 0;
-
-    }
+    return currentworld[getIndexByCoord(x, y)] == 1;
 }
 int CAbase::getNx() {return worldWidth;}
 int CAbase::getNy() {return worldHeight;}

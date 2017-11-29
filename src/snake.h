@@ -19,7 +19,6 @@ public:
     int getFoodCoordY();
 
     void PrepareFieldSnake();
-    void generateWorld(int worldX, int worldY);
     void generateFood();
 
     enum Direction { Stop, Up, Left, Down, Right };
@@ -40,10 +39,8 @@ private:
     void collision();
     void gameOver();
 
-    // 2-dim dynm Array
+    // 2-dim Array
     int currentworld[SIZE][SIZE];
-
-    QPoint ws; //worldSize
 
     QPoint head;
     QPoint tail;

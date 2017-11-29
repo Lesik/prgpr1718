@@ -30,9 +30,6 @@ void GameWidget::setUniverseSize(int size) {
         case GameOfLife:
             ca.setSize(size, size);
             break;
-        case GameSnake:
-            snake.generateWorld(size, size);
-            break;
     }
     // update damit die neue Groeße die mit der Spinbox veraendert wurde
     // angezeigt wird
@@ -132,13 +129,13 @@ void GameWidget::paintEvent(QPaintEvent *event)
             }
         }
     }
-    if currentGame == GameSnake {
+    if (currentGame == GameSnake) {
             // Paint Food
             qreal left  = (qreal) (cellWidth * snake.getFoodCoordX());
             qreal top   = (qreal) (cellHeight * snake.getFoodCoordY());
             QRectF r(left, top, cellWidth, cellHeight);
             painter.fillRect(r, Qt::red);
-            break;
+    }
 }
 
 void GameWidget::saveToFile() {
@@ -193,7 +190,7 @@ void GameWidget::loadFromFile() {
 void GameWidget::changeGame(int index) {
     switch (index) {
         case 0: currentGame = GameOfLife; ca.generate(); break;
-        case 1: currentGame = GameSnake; snake.generateWorld(universeSize, universeSize); break;
+        case 1: currentGame = GameSnake; snake.PrepareFieldSnake(); break;
     }
     //ca.changeGame(index);
     update();
