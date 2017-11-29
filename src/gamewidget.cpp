@@ -21,6 +21,7 @@ GameWidget::GameWidget(QWidget *parent) :
 {
     // der Timer wird mit dem Slot newGeneration verbunden
     connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
+    setFocusPolicy(Qt::ClickFocus);
 }
 
 // Setter

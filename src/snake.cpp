@@ -66,8 +66,8 @@ Snake::Direction Snake::getDirection() {
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
-    if (head.x() <= 0 || head.x() >= SIZE) headDirection = Stop;
-    if (head.y() <= 0 || head.y() >= SIZE) headDirection = Stop;
+    if (head.x() < 0 || head.x() > SIZE) gameOver();
+    if (head.y() < 0 || head.y() > SIZE) gameOver();
     switch (headDirection) {
         case Up:    onUp(); break;
         case Left:  onLeft(); break;
@@ -142,5 +142,6 @@ void Snake::collision() {
 }
 
 void Snake::gameOver() {
+    headDirection = Stop;
     // Timer muss disconnectet werden
 }
