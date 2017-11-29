@@ -11,8 +11,10 @@ class Snake : public QWidget
 public:
     Snake(QWidget *parent = nullptr);
 
-    void paintSnake(QPaintEvent *);
-    void paintFood(QPaintEvent *);
+// Getter
+    int getCell(int x, int y);
+    int getFoodCoordX();
+    int getFoodCoordY();
 
     void PrepareFieldSnake();
     void generateWorld(int worldX, int worldY);
@@ -34,7 +36,7 @@ private:
     void onDown();
     void onRight();
 
-    void body();
+    void generateBody();
 
     void collision();
     void gameOver();
@@ -44,7 +46,6 @@ private:
     int** nextgenworld;
 
     QPoint ws; //worldSize
-    QPointF cs; //cellSize
 
     QPoint head;
     QPoint tail;

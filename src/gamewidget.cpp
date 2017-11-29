@@ -26,10 +26,18 @@ GameWidget::GameWidget(QWidget *parent) :
 void GameWidget::setTimerIntervall(int t) {timer->setInterval(t);}
 void GameWidget::setUniverseSize(int size) {
     universeSize = size;
-    ca.setSize(size, size);
+    switch (currentGame) {
+        case GameOfLife:
+            ca.setSize(size, size);
+            break;
+        case GameSnake:
+            snake.generateWorld(size, size);
+            break;
+    }
     // update damit die neue Groeße die mit der Spinbox veraendert wurde
     // angezeigt wird
     update();
+
 }
 
 // Start, Stop und Clear Funktion
@@ -38,32 +46,51 @@ void GameWidget::stopGame() {timer->stop();}
 void GameWidget::clear() {setUniverseSize(universeSize);}
 
 void GameWidget::newGeneration() {
-    ca.evolve();        // evolve() von CAbase
+    switch (currentGame) {
+        case GameOfLife:
+            ca.evolve();    // evolve() von CAbase
+            break;
+        case GameSnake:
+            snake.evolve();
+            break;
     update();
+    }
 }
 
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
 void GameWidget::mousePressEvent(QMouseEvent *event) {
-    // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
-    double cellGeometry = 580.00/universeSize;
-    // hier wird die Position des Mauszeigers abgefragt
-    int xPosition = event->x()/cellGeometry;
-    int yPosition = event->y()/cellGeometry;
-    // je nach dem ob die lebendig war oder nicht wird sie invertiert
-    if (ca.getCell(xPosition, yPosition) == 0) {
-        ca.setCell(xPosition, yPosition, 1);
+    switch (currentGame) {
+        case 0: {
+            // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
+            double cellGeometry = 580.00/universeSize;
+            // hier wird die Position des Mauszeigers abgefragt
+            int xPosition = event->x()/cellGeometry;
+            int yPosition = event->y()/cellGeometry;
+            // je nach dem ob die lebendig war oder nicht wird sie invertiert
+            if (ca.getCell(xPosition, yPosition) == 0) {
+                ca.setCell(xPosition, yPosition, 1);
+            }
+            else ca.setCell(xPosition, yPosition, 0);
+            break;
+        }
+        case 1: return;
     }
-    else ca.setCell(xPosition, yPosition, 0);
     update();
 }
 
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
 void GameWidget::mouseMoveEvent(QMouseEvent *event) {
-    double cellGeometry = 580.00/universeSize;
-    int xPosition = event->x()/cellGeometry;
-    int yPosition = event->y()/cellGeometry;
-    if (ca.getCell(xPosition, yPosition) == 0) {
-        ca.setCell(xPosition, yPosition, 1);
+    switch (currentGame) {
+        case 0: {
+            double cellGeometry = 580.00/universeSize;
+            int xPosition = event->x()/cellGeometry;
+            int yPosition = event->y()/cellGeometry;
+            if (ca.getCell(xPosition, yPosition) == 0) {
+               ca.setCell(xPosition, yPosition, 1);
+            }
+            break;
+        }
+        case 1: return; break;
     }
     update();
 }
@@ -93,79 +120,120 @@ void GameWidget::paintEvent(QPaintEvent *event)
     // initiate painter
     QPainter painter(this);
     // for each cell in world, if is alive
-    for (int x = 0; x < ca.getNx(); x++) {
-        for (int y = 0; y < ca.getNy(); y++) {
-            if (ca.getCell(x, y)==1) {
-                // calculate left and top edges by calculating distance from top left edge
-                qreal left = (qreal) (cellWidth * x);
-                qreal top = (qreal) (cellHeight * y);
-                // the cell should be cellWidth wide and cellHeight tall
-                QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
-                painter.fillRect(r, Qt::darkBlue);
+    for (int x = 0; x < universeSize; x++) {
+        for (int y = 0; y < universeSize; y++) {
+            switch (currentGame) {
+                case GameOfLife: {
+                    if (ca.getCell(x, y)==1) {
+                        // calculate left and top edges by calculating distance from top left edge
+                        qreal left = (qreal) (cellWidth * x);
+                        qreal top = (qreal) (cellHeight * y);
+                        // the cell should be cellWidth wide and cellHeight tall
+                        QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+                        painter.fillRect(r, Qt::darkBlue);
+                    }
+                    break;
+                }
+                case GameSnake: {
+                    if (snake.getCell(x, y) != 0) {
+                        // calculate left and top edges by calculating distance from top left edge
+                        qreal left = (qreal) (cellWidth * x);
+                        qreal top = (qreal) (cellHeight * y);
+                        // the cell should be cellWidth wide and cellHeight tall
+                        QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+                        painter.fillRect(r, Qt::darkBlue);
+                    }
+                    // Paint Food
+                    qreal left  = (qreal) (cellWidth * snake.getFoodCoordX());
+                    qreal top   = (qreal) (cellHeight * snake.getFoodCoordY());
+                    QRectF r(left, top, cellWidth, cellHeight);
+                    painter.fillRect(r, Qt::red);
+                    break;
+                }
             }
         }
     }
 }
 
 void GameWidget::saveToFile() {
-    QString fileName = QFileDialog::getSaveFileName(this,
-            tr("Save Current Universe"), "",
-            tr("Textfile (*.txt);;All Files (*)"));                 // Speicherdatei wird als *txt gespeichert
+    switch (currentGame) {
+        case GameOfLife: {
+            QString fileName = QFileDialog::getSaveFileName(this,
+                    tr("Save Current Universe"), "",
+                    tr("Textfile (*.txt);;All Files (*)"));                 // Speicherdatei wird als *txt gespeichert
 
-    QFile myFile(fileName);
-    if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-            QTextStream stream(&myFile);
-            stream << universeSize << endl;                         // Spielfeldgröße wird gepeichert
-            for (int j = 0; j < universeSize; j++) {
-                for (int i = 0; i < universeSize; i++) {
-                    stream << ca.getCell(i, j) << endl;             // komplettes Spielfeld wird mit 0 und 1 gespeichert
-                }
+            QFile myFile(fileName);
+            if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                    QTextStream stream(&myFile);
+                    stream << universeSize << endl;                         // Spielfeldgröße wird gepeichert
+                    for (int j = 0; j < universeSize; j++) {
+                        for (int i = 0; i < universeSize; i++) {
+                            stream << ca.getCell(i, j) << endl;             // komplettes Spielfeld wird mit 0 und 1 gespeichert
+                        }
+                    }
             }
+            myFile.close();
+            break;
+        }
+    case GameSnake: return; break;
     }
-    myFile.close();
 }
 
 void GameWidget::loadFromFile() {
-    QString fileName = QFileDialog::getOpenFileName(this,
-            tr("Load Saved Universe"), "",
-            tr("Textfile (*.txt);;All Files (*)"));                 // *txt wird geladen
-    QFile myFile(fileName);
-    if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        QTextStream in(&myFile);
-        QString line = in.readLine();                               // nimmt die erste Zeile
-        setUniverseSize(line.toInt());                              // Spielfeldgröße wird gelesen und geladen
-        int i = 0;
-        // jede Zeile wird durchgegangen und zu seiner Position im Array hinzugefügt
-        while(!in.atEnd()) {    
-            QString line = in.readLine();
-            //ca.getCurrentWorld()[i] = line.toInt();                 // Spielfeld wird gelesen und geladen
-            i++;
+    switch (currentGame) {
+        case GameOfLife: {
+            QString fileName = QFileDialog::getOpenFileName(this,
+                    tr("Load Saved Universe"), "",
+                    tr("Textfile (*.txt);;All Files (*)"));                 // *txt wird geladen
+            QFile myFile(fileName);
+            if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
+                QTextStream in(&myFile);
+                QString line = in.readLine();                               // nimmt die erste Zeile
+                setUniverseSize(line.toInt());                              // Spielfeldgröße wird gelesen und geladen
+                int i = 0;
+                // jede Zeile wird durchgegangen und zu seiner Position im Array hinzugefügt
+                while(!in.atEnd()) {
+                    QString line = in.readLine();
+                    //ca.getCurrentWorld()[i] = line.toInt();                 // Spielfeld wird gelesen und geladen
+                    i++;
+                }
+            }
+            myFile.close();
         }
+        case GameSnake: return; break;
     }
-    myFile.close();
 }
 
 void GameWidget::changeGame(int index) {
-    ca.changeGame(index);
+    switch (index) {
+        case 0: currentGame = 0; ca.generate(); break;
+        case 1: currentGame = 1; snake.generateWorld(universeSize, universeSize); break;
+    }
+    //ca.changeGame(index);
     update();
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {
-    switch (event->key()) {
-        case Qt::Key_Up:    snake.setDirection(snake.Up); break;
-        case Qt::Key_Left:  snake.setDirection(snake.Left); break;
-        case Qt::Key_Down:  snake.setDirection(snake.Down); break;
-        case Qt::Key_Right: snake.setDirection(snake.Right); break;
+    switch (currentGame) {
+        case GameOfLife: return; break;
+        case GameSnake:
+            switch (event->key()) {
+                case Qt::Key_Up:    snake.setDirection(snake.Up);   break;
+                case Qt::Key_Left:  snake.setDirection(snake.Left); break;
+                case Qt::Key_Down:  snake.setDirection(snake.Down); break;
+                case Qt::Key_Right: snake.setDirection(snake.Right);break;
 
-        case Qt::Key_W:     snake.setDirection(snake.Up); break;
-        case Qt::Key_A:     snake.setDirection(snake.Left); break;
-        case Qt::Key_S:     snake.setDirection(snake.Down); break;
-        case Qt::Key_D:     snake.setDirection(snake.Right); break;
+                case Qt::Key_W:     snake.setDirection(snake.Up);   break;
+                case Qt::Key_A:     snake.setDirection(snake.Left); break;
+                case Qt::Key_S:     snake.setDirection(snake.Down); break;
+                case Qt::Key_D:     snake.setDirection(snake.Right);break;
 
-        case Qt::Key_8:     snake.setDirection(snake.Up); break;
-        case Qt::Key_4:     snake.setDirection(snake.Left); break;
-        case Qt::Key_2:     snake.setDirection(snake.Down); break;
-        case Qt::Key_6:     snake.setDirection(snake.Right); break;
-    }
-    newGeneration();
+                case Qt::Key_8:     snake.setDirection(snake.Up);   break;
+                case Qt::Key_4:     snake.setDirection(snake.Left); break;
+                case Qt::Key_2:     snake.setDirection(snake.Down); break;
+                case Qt::Key_6:     snake.setDirection(snake.Right);break;
+            }
+            newGeneration();
+            break;
+        }
 }

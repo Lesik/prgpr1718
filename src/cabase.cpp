@@ -60,8 +60,6 @@ void CAbase::generate() {
         currentY = 2;
         currentworld[getIndexByCoord(currentX, currentY)] = 1;
         direction = Down;
-
-        //snake.generateWorld(worldWidth, worldHeight);
     }
 }
 
@@ -206,8 +204,6 @@ void CAbase::evolve() {
 
         currentworld[getIndexByCoord(currentX, currentY)] = length;
         break;
-
-        //snake.evolve();
     }
 }
 

@@ -31,7 +31,7 @@ signals:
 
 public slots:
     void setTimerIntervall(int t);
-    void setUniverseSize(int size);
+    void setUniverseSize(int sizeun);
     void startGame();
     void stopGame();
     void clear();
@@ -46,6 +46,9 @@ private:                    // Private Variablen
     QColor colour;
     int universeSize;
 
+    enum GameType { GameSnake, GameOfLife };
+    GameType game;
+    int currentGame;
     CAbase ca;              // CAbase aus vorherigen Aufgaben
     Snake snake;
 };

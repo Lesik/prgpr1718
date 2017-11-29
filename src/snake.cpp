@@ -9,27 +9,16 @@ Snake::Snake(QWidget *parent) :
 {
 }
 
-void Snake::paintSnake(QPaintEvent *) {
-    QPainter painter(this);
-    for (int x = 0; x < ws.x(); x++) {
-        for (int y = 0; y < ws.y(); y++) {
-            if(currentworld[x][y] != 0) { // Füllt alle Felder != 0
-                qreal left  = cs.x() * x;
-                qreal top   = cs.y() * y;
-                QRectF r(left, top, cs.x(), cs.y());
-                painter.fillRect(r, Qt::darkBlue); //Farbe für Felder
-            }
-        }
-    }
+int Snake::getCell(int x, int y) {
+    return currentworld[x][y];
 }
 
-// Aufgabe 4b)
-void Snake::paintFood(QPaintEvent *) {
-    QPainter painter(this);
-    qreal left  = cs.x() * food.x();
-    qreal top   = cs.y() * food.y();
-    QRectF r(left, top, cs.x(), cs.y());
-    painter.fillRect(r, Qt::red); // Farbe des Essens
+int Snake::getFoodCoordX() {
+    return food.x();
+}
+
+int Snake::getFoodCoordY() {
+    return food.y();
 }
 
 // Aufgabe 2)
@@ -46,15 +35,13 @@ void Snake::PrepareFieldSnake() {
     headDirection = Up;
     currentworld[head.x()][head.y()] = 8;
     head = tail;
+    length = 1;
     generateFood();
 }
 
 void Snake::generateWorld(int worldX, int worldY) {
     ws.setX(worldX);
     ws.setY(worldY);
-    // Zellengröße soll ausgerechnet werden
-    //cs.setX(width() / ws.x());
-    //cs.setY(height() / ws.y());
 
     for (int i = 0; i < ws.x(); i++) {
         currentworld[i] = new int[ws.y()];
@@ -113,37 +100,47 @@ void Snake::eatFood() {
 }
 
 void Snake::paintEvent(QPaintEvent *event) {
-    paintSnake(event);
-    paintFood(event);
 }
 
 void Snake::onUp() {
     currentworld[head.x()][head.y()-1] = 8;
-    body();
+    generateBody();
     head.ry() -= 1;
 }
 
 void Snake::onLeft() {
     currentworld[head.x()-1][head.y()] = 4;
-    body();
+    generateBody();
     head.rx() -= 1;
 }
 
 void Snake::onDown() {
     currentworld[head.x()][head.y()+1] = 2;
-    body();
+    generateBody();
     head.ry() += 1;
 }
 
 void Snake::onRight() {
     currentworld[head.x()+1][head.y()] = 6;
-    body();
+    generateBody();
     head.rx() += 1;
 }
 
-void Snake::body() {
-    if (head != food)
-        currentworld[tail.x()][tail.y()] = 0;
+void Snake::generateBody() {
+    int snakeLength = 0;
+    int currentTail = currentworld[tail.x()][tail.y()];
+    currentworld[tail.x()][tail.y()] = 0;
+    if (head != food) {
+        do {
+            switch (currentTail) {
+                case 2: break;
+                case 4: break;
+                case 6: break;
+                case 8: break;
+            }
+            snakeLength++;
+        } while (length == snakeLength);
+    }
 }
 
 // Aufgabe 3d)
