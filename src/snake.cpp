@@ -78,8 +78,8 @@ Snake::Direction Snake::getDirection() {
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
-    if (head.x() < 0 || head.x() > ws.x()) headDirection = Stop;
-    if (head.y() < 0 || head.y() > ws.y()) headDirection = Stop;
+    //if (head.x() < 0 || head.x() > ws.x()) headDirection = Stop;
+    //if (head.y() < 0 || head.y() > ws.y()) headDirection = Stop;
     switch (headDirection) {
         case Up:    onUp(); break;
         case Left:  onLeft(); break;
@@ -97,9 +97,6 @@ void Snake::eatFood() {
     }
     // neues Essen wird generiert
     generateFood();
-}
-
-void Snake::paintEvent(QPaintEvent *event) {
 }
 
 void Snake::onUp() {
@@ -127,7 +124,7 @@ void Snake::onRight() {
 }
 
 void Snake::generateBody() {
-    int snakeLength = 0;
+    int counter = 0;
     int currentTail = currentworld[tail.x()][tail.y()];
     currentworld[tail.x()][tail.y()] = 0;
     if (head != food) {
@@ -138,8 +135,8 @@ void Snake::generateBody() {
                 case 6: break;
                 case 8: break;
             }
-            snakeLength++;
-        } while (length == snakeLength);
+            counter++;
+        } while (length == counter);
     }
 }
 

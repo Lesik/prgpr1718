@@ -60,7 +60,7 @@ void GameWidget::newGeneration() {
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
 void GameWidget::mousePressEvent(QMouseEvent *event) {
     switch (currentGame) {
-        case 0: {
+        case GameOfLife: {
             // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
             double cellGeometry = 580.00/universeSize;
             // hier wird die Position des Mauszeigers abgefragt
@@ -73,7 +73,7 @@ void GameWidget::mousePressEvent(QMouseEvent *event) {
             else ca.setCell(xPosition, yPosition, 0);
             break;
         }
-        case 1: return;
+        case GameSnake: return; break;
     }
     update();
 }
@@ -81,7 +81,7 @@ void GameWidget::mousePressEvent(QMouseEvent *event) {
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
 void GameWidget::mouseMoveEvent(QMouseEvent *event) {
     switch (currentGame) {
-        case 0: {
+        case GameOfLife: {
             double cellGeometry = 580.00/universeSize;
             int xPosition = event->x()/cellGeometry;
             int yPosition = event->y()/cellGeometry;
@@ -90,7 +90,7 @@ void GameWidget::mouseMoveEvent(QMouseEvent *event) {
             }
             break;
         }
-        case 1: return; break;
+        case GameSnake: return; break;
     }
     update();
 }
@@ -206,8 +206,8 @@ void GameWidget::loadFromFile() {
 
 void GameWidget::changeGame(int index) {
     switch (index) {
-        case 0: currentGame = 0; ca.generate(); break;
-        case 1: currentGame = 1; snake.generateWorld(universeSize, universeSize); break;
+        case 0: currentGame = GameOfLife; ca.generate(); break;
+        case 1: currentGame = GameSnake; snake.generateWorld(universeSize, universeSize); break;
     }
     //ca.changeGame(index);
     update();

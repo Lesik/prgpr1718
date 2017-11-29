@@ -27,9 +27,6 @@ public:
     void evolve();
     void eatFood();
 
-protected:
-    void paintEvent(QPaintEvent *event) override;
-
 private:
     void onUp();
     void onLeft();
