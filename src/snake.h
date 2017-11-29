@@ -6,6 +6,8 @@
 #include <QWidget>
 #include <QPainter>
 
+#define SIZE 30
+
 class Snake : public QWidget
 {
 public:
@@ -39,8 +41,7 @@ private:
     void gameOver();
 
     // 2-dim dynm Array
-    int** currentworld;
-    int** nextgenworld;
+    int currentworld[SIZE][SIZE];
 
     QPoint ws; //worldSize
 

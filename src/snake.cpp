@@ -23,12 +23,6 @@ int Snake::getFoodCoordY() {
 
 // Aufgabe 2)
 void Snake::PrepareFieldSnake() {
-    for (int x = 0; x < ws.x(); x++) {
-        for (int y = 0; y < ws.y(); y++) {
-            currentworld[x][y] = 0;
-            nextgenworld[x][y] = 0;
-        }
-    }
     // Kopf wird mitten ins Spielfeld gesetzt mit Richtung oben
     head.setX((int)(ws.x() / 2));
     head.setY((int)(ws.y() / 2));
@@ -40,19 +34,17 @@ void Snake::PrepareFieldSnake() {
 }
 
 void Snake::generateWorld(int worldX, int worldY) {
-    ws.setX(worldX);
-    ws.setY(worldY);
+    ws.setX(30);
+    ws.setY(30);
 
-    for (int i = 0; i < ws.x(); i++) {
-        currentworld[i] = new int[ws.y()];
-        nextgenworld[i] = new int[ws.y()];
-    }
+    memset(currentworld, 0, sizeof(currentworld[0][0]) * 30 * 30);
 
     PrepareFieldSnake();
 }
 
 void Snake::generateFood() {
     do {
+        // arithmetic exception
         food.setX(rand() % ws.x());
         food.setY(rand() % ws.y());
     } while (head != food);

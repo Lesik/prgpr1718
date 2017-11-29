@@ -122,37 +122,23 @@ void GameWidget::paintEvent(QPaintEvent *event)
     // for each cell in world, if is alive
     for (int x = 0; x < universeSize; x++) {
         for (int y = 0; y < universeSize; y++) {
-            switch (currentGame) {
-                case GameOfLife: {
-                    if (ca.getCell(x, y)==1) {
-                        // calculate left and top edges by calculating distance from top left edge
-                        qreal left = (qreal) (cellWidth * x);
-                        qreal top = (qreal) (cellHeight * y);
-                        // the cell should be cellWidth wide and cellHeight tall
-                        QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
-                        painter.fillRect(r, Qt::darkBlue);
-                    }
-                    break;
-                }
-                case GameSnake: {
-                    if (snake.getCell(x, y) != 0) {
-                        // calculate left and top edges by calculating distance from top left edge
-                        qreal left = (qreal) (cellWidth * x);
-                        qreal top = (qreal) (cellHeight * y);
-                        // the cell should be cellWidth wide and cellHeight tall
-                        QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
-                        painter.fillRect(r, Qt::darkBlue);
-                    }
-                    // Paint Food
-                    qreal left  = (qreal) (cellWidth * snake.getFoodCoordX());
-                    qreal top   = (qreal) (cellHeight * snake.getFoodCoordY());
-                    QRectF r(left, top, cellWidth, cellHeight);
-                    painter.fillRect(r, Qt::red);
-                    break;
-                }
+            if (snake.getCell(x, y) != 0) {
+                // calculate left and top edges by calculating distance from top left edge
+                qreal left = (qreal) (cellWidth * x);
+                qreal top = (qreal) (cellHeight * y);
+                // the cell should be cellWidth wide and cellHeight tall
+                QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+                painter.fillRect(r, Qt::darkBlue);
             }
         }
     }
+    if currentGame == GameSnake {
+            // Paint Food
+            qreal left  = (qreal) (cellWidth * snake.getFoodCoordX());
+            qreal top   = (qreal) (cellHeight * snake.getFoodCoordY());
+            QRectF r(left, top, cellWidth, cellHeight);
+            painter.fillRect(r, Qt::red);
+            break;
 }
 
 void GameWidget::saveToFile() {
