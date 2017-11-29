@@ -44,13 +44,14 @@ public slots:
 private:                    // Private Variablen
     QTimer *timer;
     QColor colour;
-    int universeSize;
 
     enum GameType { GameSnake, GameOfLife };
     GameType game;
     int currentGame;
     CAbase ca;              // CAbase aus vorherigen Aufgaben
     Snake snake;
+    int getUniverseSize();
+    int getCell(int x, int y);
 };
 
 #endif // GAMEWIDGET_H

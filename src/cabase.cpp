@@ -13,7 +13,7 @@ using namespace std;
  * Constructor – set
  */
 CAbase::CAbase() {}
-CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; changeGame(GameOfLife); }
+CAbase::CAbase(int x, int y) { worldWidth = x; worldHeight = y; }
 
 /*
  * Empty deconstructor
@@ -23,43 +23,15 @@ CAbase::~CAbase() {}
 // gibt Position des Elementes im Array zurück
 int CAbase::getIndexByCoord(int x, int y) {return x + worldHeight * y;}
 
-void CAbase::changeGame(int index) {
-    switch (index) {
-    case 0:
-        game = GameOfLife;
-        break;
-    case 1:
-        game = GameSnake;
-        break;
-    }
-    generate();
-}
-
 void CAbase::generate() {
     currentworld = new int[worldWidth * worldHeight];
     nextgenworld = new int[worldWidth * worldHeight];
 
-    switch (game) {
-    case GameOfLife:
-        for (int x = 0; x < worldWidth; x++) {
-            for (int y = 0; y < worldHeight; y++) {
-                    currentworld[getIndexByCoord(x, y)] = 0;
-                    nextgenworld[getIndexByCoord(x, y)] = 0;
-            }
+    for (int x = 0; x < worldWidth; x++) {
+        for (int y = 0; y < worldHeight; y++) {
+                currentworld[getIndexByCoord(x, y)] = 0;
+                nextgenworld[getIndexByCoord(x, y)] = 0;
         }
-        break;
-    case GameSnake:
-
-        for (int x = 0; x < worldWidth; x++) {
-            for (int y = 0; y < worldHeight; y++) {
-                    currentworld[getIndexByCoord(x, y)] = 0;
-                    nextgenworld[getIndexByCoord(x, y)] = 0;
-            }
-        }
-        currentX = 2;
-        currentY = 2;
-        currentworld[getIndexByCoord(currentX, currentY)] = 1;
-        direction = Down;
     }
 }
 
@@ -153,54 +125,16 @@ void CAbase::regel(int x, int y)
 
 void CAbase::clicked(int x, int y)
 {
-    if (game == GameOfLife)
-        setCell(x, y, !getCell(x, y));
+    setCell(x, y, !getCell(x, y));
 }
 
 void CAbase::evolve() {
-    switch (game) {
-    case GameOfLife:
-        for (int y = 0; y < worldHeight; y++)       // Alle Felder werden die Regel getestet
-            for (int x = 0; x < worldWidth; x++)
-                regel(x, y);
+    for (int y = 0; y < worldHeight; y++)       // Alle Felder werden die Regel getestet
+        for (int x = 0; x < worldWidth; x++)
+            regel(x, y);
 
-        for (int y = 0; y < worldHeight; y++)       // Überschreiben
-            for (int x = 0; x < worldWidth; x++)
-                currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
-        break;
-    case GameSnake:
+    for (int y = 0; y < worldHeight; y++)       // Überschreiben
+        for (int x = 0; x < worldWidth; x++)
+            currentworld[getIndexByCoord(x, y)] = nextgenworld[getIndexByCoord(x, y)];
 
-        int length = currentworld[getIndexByCoord(currentX, currentY)];
-        switch (direction) {
-        case Up:
-            currentY -= 1;
-            break;
-        case Left:
-            currentX -= 1;
-            break;
-        case Down:
-            currentY += 1;
-            break;
-        case Right:
-            currentX += 1;
-            break;
-        }
-
-        for (int y = 0; y < worldHeight; y++) {
-            for (int x = 0; x < worldWidth; x++) {
-                int value = currentworld[getIndexByCoord(x, y)];
-                if (value > 0) {
-                    currentworld[getIndexByCoord(x, y)]--;
-                }
-            }
-        }
-
-        currentworld[getIndexByCoord(currentX, currentY)] = length;
-        break;
-    }
 }
-
-void CAbase::onUp() { direction = Up; }
-void CAbase::onLeft() { direction = Left; }
-void CAbase::onDown() { direction = Down; }
-void CAbase::onRight() { direction = Right; }

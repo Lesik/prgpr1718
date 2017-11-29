@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->gridLayout->addWidget(game);
+    game->changeGame(0);
 }
 
 MainWindow::~MainWindow() {delete ui;}

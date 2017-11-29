@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
+#include <QDebug>
 
 #include "gamewidget.h"
 using namespace std;
@@ -25,7 +26,6 @@ GameWidget::GameWidget(QWidget *parent) :
 // Setter
 void GameWidget::setTimerIntervall(int t) {timer->setInterval(t);}
 void GameWidget::setUniverseSize(int size) {
-    universeSize = size;
     switch (currentGame) {
         case GameOfLife:
             ca.setSize(size, size);
@@ -40,18 +40,18 @@ void GameWidget::setUniverseSize(int size) {
 // Start, Stop und Clear Funktion
 void GameWidget::startGame() {timer->start();}
 void GameWidget::stopGame() {timer->stop();}
-void GameWidget::clear() {setUniverseSize(universeSize);}
+void GameWidget::clear() {setUniverseSize(getUniverseSize());}
 
 void GameWidget::newGeneration() {
     switch (currentGame) {
-        case GameOfLife:
-            ca.evolve();    // evolve() von CAbase
-            break;
-        case GameSnake:
-            snake.evolve();
-            break;
-    update();
+    case GameOfLife:
+        ca.evolve();    // evolve() von CAbase
+        break;
+    case GameSnake:
+        snake.evolve();
+        break;
     }
+    update();
 }
 
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
@@ -59,7 +59,7 @@ void GameWidget::mousePressEvent(QMouseEvent *event) {
     switch (currentGame) {
         case GameOfLife: {
             // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
-            double cellGeometry = 580.00/universeSize;
+            double cellGeometry = 580.00 / getUniverseSize();
             // hier wird die Position des Mauszeigers abgefragt
             int xPosition = event->x()/cellGeometry;
             int yPosition = event->y()/cellGeometry;
@@ -79,7 +79,7 @@ void GameWidget::mousePressEvent(QMouseEvent *event) {
 void GameWidget::mouseMoveEvent(QMouseEvent *event) {
     switch (currentGame) {
         case GameOfLife: {
-            double cellGeometry = 580.00/universeSize;
+            double cellGeometry = 580.00 / getUniverseSize();
             int xPosition = event->x()/cellGeometry;
             int yPosition = event->y()/cellGeometry;
             if (ca.getCell(xPosition, yPosition) == 0) {
@@ -107,25 +107,50 @@ void GameWidget::paintGrid(QPaintEvent *, double cellWidth, double cellHeight) {
     painter.drawRect(borders);
 }
 
+int GameWidget::getUniverseSize() {
+    switch (currentGame) {
+    case GameOfLife:
+        return ca.getNx();
+        break;
+    case GameSnake:
+        return snake.getSize();
+        break;
+    }
+    return 30;
+}
+
+int GameWidget::getCell(int x, int y) {
+    switch (currentGame) {
+    case GameOfLife:
+        return ca.getCell(x, y);
+        break;
+    case GameSnake:
+        return snake.getCell(x, y);
+        break;
+    }
+    return 0;
+}
+
 // wird ausgefuert wenn update() ausgefuehrt wurde
 void GameWidget::paintEvent(QPaintEvent *event)
 {
-    double cellWidth = (double) width() / ca.getNx();
-    double cellHeight = (double) height() / ca.getNy();
+    double cellWidth = (double) width() / getUniverseSize();
+    double cellHeight = (double) height() / getUniverseSize();
     paintGrid(event, cellWidth, cellHeight);
 
     // initiate painter
     QPainter painter(this);
     // for each cell in world, if is alive
+    int universeSize = getUniverseSize();
     for (int x = 0; x < universeSize; x++) {
         for (int y = 0; y < universeSize; y++) {
-            if (snake.getCell(x, y) != 0) {
+            if (getCell(x, y) != 0) {
                 // calculate left and top edges by calculating distance from top left edge
                 qreal left = (qreal) (cellWidth * x);
                 qreal top = (qreal) (cellHeight * y);
                 // the cell should be cellWidth wide and cellHeight tall
                 QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
-                painter.fillRect(r, Qt::darkBlue);
+                painter.fillRect(r, currentGame == GameSnake ? Qt::darkBlue : Qt::red);
             }
         }
     }
@@ -148,9 +173,9 @@ void GameWidget::saveToFile() {
             QFile myFile(fileName);
             if (myFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
                     QTextStream stream(&myFile);
-                    stream << universeSize << endl;                         // Spielfeldgröße wird gepeichert
-                    for (int j = 0; j < universeSize; j++) {
-                        for (int i = 0; i < universeSize; i++) {
+                    stream << getUniverseSize() << endl;                         // Spielfeldgröße wird gepeichert
+                    for (int j = 0; j < getUniverseSize(); j++) {
+                        for (int i = 0; i < getUniverseSize(); i++) {
                             stream << ca.getCell(i, j) << endl;             // komplettes Spielfeld wird mit 0 und 1 gespeichert
                         }
                     }
@@ -189,8 +214,17 @@ void GameWidget::loadFromFile() {
 
 void GameWidget::changeGame(int index) {
     switch (index) {
-        case 0: currentGame = GameOfLife; ca.generate(); break;
-        case 1: currentGame = GameSnake; snake.PrepareFieldSnake(); break;
+    case 0:
+        currentGame = GameOfLife;
+        ca.setSize(50, 50);
+        break;
+    case 1:
+        currentGame = GameSnake;
+        snake.PrepareFieldSnake();
+        break;
+    default:
+        currentGame = GameOfLife;
+        break;
     }
     //ca.changeGame(index);
     update();

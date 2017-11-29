@@ -10,11 +10,6 @@
 class CAbase
 {
 private:
-    enum GameType { GameSnake, GameOfLife };
-    GameType game;
-    Snake snake;
-    enum Direction { Up, Left, Down, Right };
-    Direction direction;
     int worldWidth, worldHeight;                 // Membervariable
     int* currentworld;
     int* nextgenworld;
@@ -48,14 +43,6 @@ public:
     void generate();
     void print();
     void evolve();
-
-    void changeGame(int index);
-    void onUp();
-    void onLeft();
-    void onDown();
-    void onRight();
-
-
 };
 
 #endif // CABASE_H

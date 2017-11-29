@@ -14,6 +14,7 @@ public:
     Snake(QWidget *parent = nullptr);
 
 // Getter
+    int getSize();
     int getCell(int x, int y);
     int getFoodCoordX();
     int getFoodCoordY();

@@ -9,6 +9,10 @@ Snake::Snake(QWidget *parent) :
 {
 }
 
+int Snake::getSize() {
+    return SIZE;
+}
+
 int Snake::getCell(int x, int y) {
     return currentworld[x][y];
 }
@@ -29,7 +33,7 @@ void Snake::PrepareFieldSnake() {
     head.setY((int)(SIZE / 2));
     headDirection = Up;
     currentworld[head.x()][head.y()] = 8;
-    head = tail;
+    tail = head;
     length = 1;
     generateFood();
 }
@@ -39,7 +43,7 @@ void Snake::generateFood() {
         // arithmetic exception
         food.setX(rand() % SIZE);
         food.setY(rand() % SIZE);
-    } while (head != food);
+    } while (head == food);
 }
 
 // Aufgabe 3b)
@@ -62,8 +66,8 @@ Snake::Direction Snake::getDirection() {
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
-    //if (head.x() < 0 || head.x() > ws.x()) headDirection = Stop;
-    //if (head.y() < 0 || head.y() > ws.y()) headDirection = Stop;
+    if (head.x() <= 0 || head.x() >= SIZE) headDirection = Stop;
+    if (head.y() <= 0 || head.y() >= SIZE) headDirection = Stop;
     switch (headDirection) {
         case Up:    onUp(); break;
         case Left:  onLeft(); break;
@@ -76,11 +80,11 @@ void Snake::evolve() {
 
 void Snake::eatFood() {
     if (head == food) {
-        length++;
         // body wird vergrößert
+        length++;
+        // neues Essen wird generiert
+        generateFood();
     }
-    // neues Essen wird generiert
-    generateFood();
 }
 
 void Snake::onUp() {
@@ -108,7 +112,8 @@ void Snake::onRight() {
 }
 
 void Snake::generateBody() {
-    int counter = 0;
+    currentworld[head.x()][head.y()] = 0;
+    /*int counter = 0;
     int currentTail = currentworld[tail.x()][tail.y()];
     currentworld[tail.x()][tail.y()] = 0;
     if (head != food) {
@@ -121,7 +126,7 @@ void Snake::generateBody() {
             }
             counter++;
         } while (length == counter);
-    }
+    }*/
 }
 
 // Aufgabe 3d)
