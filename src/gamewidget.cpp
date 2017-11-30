@@ -17,7 +17,8 @@ using namespace std;
 
 GameWidget::GameWidget(QWidget *parent) :
     QWidget(parent),
-    timer(new QTimer(this))
+    timer(new QTimer(this)),
+    snake(new Snake(this))
 {
     // der Timer wird mit dem Slot newGeneration verbunden
     connect(timer, SIGNAL(timeout()), this, SLOT(newGeneration()));
