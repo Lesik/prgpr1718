@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QRectF>
 #include <QWidget>
+#include <QDebug>
 
 #include "snake.h"
 
@@ -17,24 +18,19 @@ int Snake::getCell(int x, int y) {
     return currentworld[x][y];
 }
 
-int Snake::getFoodCoordX() {
-    return food.x();
-}
-
-int Snake::getFoodCoordY() {
-    return food.y();
+QPoint Snake::getFood() {
+    return food;
 }
 
 // Aufgabe 2)
-void Snake::PrepareFieldSnake() {
+void Snake::prepareFieldSnake() {
     memset(currentworld, 0, sizeof(currentworld[0][0]) * SIZE * SIZE);
     // Kopf wird mitten ins Spielfeld gesetzt mit Richtung oben
     head.setX((int)(SIZE / 2));
     head.setY((int)(SIZE / 2));
-    headDirection = Up;
-    currentworld[head.x()][head.y()] = 8;
+    headDirection = Down;
+    currentworld[head.x()][head.y()] = 2;
     tail = head;
-    length = 1;
     generateFood();
 }
 
@@ -59,86 +55,76 @@ void Snake::setDirection(Direction direction) {
     headDirection = direction;
 }
 
-Snake::Direction Snake::getDirection() {
-    return headDirection;
-}
-
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
     if (head.x() < 0 || head.x() > SIZE) gameOver();
     if (head.y() < 0 || head.y() > SIZE) gameOver();
+
+    doHead();
+    doTail();
+}
+
+void Snake::doHead() {
     switch (headDirection) {
-        case Up:    onUp(); break;
-        case Left:  onLeft(); break;
-        case Down:  onDown(); break;
-        case Right: onRight(); break;
-        case Stop:  return; break;
+    case Down:
+        currentworld[head.x()][head.y()] = 2;
+        head.ry()++;
+        if (currentworld[head.x()][head.y()] != 0)
+            gameOver();
+        currentworld[head.x()][head.y()] = 2;
+        break;
+    case Left:
+        currentworld[head.x()][head.y()] = 4;
+        head.rx()--;
+        if (currentworld[head.x()][head.y()] != 0)
+            gameOver();
+        currentworld[head.x()][head.y()] = 4;
+        break;
+    case Right:
+        currentworld[head.x()][head.y()] = 6;
+        head.rx()++;
+        if (currentworld[head.x()][head.y()] != 0)
+            gameOver();
+        currentworld[head.x()][head.y()] = 6;
+        break;
+    case Up:
+        currentworld[head.x()][head.y()] = 8;
+        head.ry()--;
+        if (currentworld[head.x()][head.y()] != 0)
+            gameOver();
+        currentworld[head.x()][head.y()] = 8;
+        break;
+    case Stop:
+        return;
+        break;
     }
-    collision();
 }
 
-void Snake::eatFood() {
-    if (head == food) {
-        // body wird vergrößert
-        length++;
-        // neues Essen wird generiert
+void Snake::doTail() {
+    bool eaten = (head.x() == food.x() && head.y() == food.y());
+    if (eaten) {
         generateFood();
+    } else {
+        switch (currentworld[tail.x()][tail.y()]) {
+        case 2:
+            currentworld[tail.x()][tail.y()] = 0;
+            tail.ry()++;
+            break;
+        case 4:
+            currentworld[tail.x()][tail.y()] = 0;
+            tail.rx()--;
+            break;
+        case 6:
+            currentworld[tail.x()][tail.y()] = 0;
+            tail.rx()++;
+            break;
+        case 8:
+            currentworld[tail.x()][tail.y()] = 0;
+            tail.ry()--;
+            break;
+        }
     }
-}
-
-void Snake::onUp() {
-    currentworld[head.x()][head.y()-1] = 8;
-    generateBody();
-    head.ry() -= 1;
-}
-
-void Snake::onLeft() {
-    currentworld[head.x()-1][head.y()] = 4;
-    generateBody();
-    head.rx() -= 1;
-}
-
-void Snake::onDown() {
-    currentworld[head.x()][head.y()+1] = 2;
-    generateBody();
-    head.ry() += 1;
-}
-
-void Snake::onRight() {
-    currentworld[head.x()+1][head.y()] = 6;
-    generateBody();
-    head.rx() += 1;
-}
-
-void Snake::generateBody() {
-    currentworld[head.x()][head.y()] = 0;
-    /*int counter = 0;
-    int currentTail = currentworld[tail.x()][tail.y()];
-    currentworld[tail.x()][tail.y()] = 0;
-    if (head != food) {
-        do {
-            switch (currentTail) {
-                case 2: break;
-                case 4: break;
-                case 6: break;
-                case 8: break;
-            }
-            counter++;
-        } while (length == counter);
-    }*/
-}
-
-// Aufgabe 3d)
-void Snake::collision() {
-    //Kollision mit Essen
-    eatFood();
-    int x = head.x();
-    int y = head.y();
-    // Kollision mit Wand
-    if (x < 0 || x > SIZE) gameOver();
-    if (y < 0 || y > SIZE) gameOver();
-    // Kollision mit sich selbst
 }
 
 void Snake::gameOver() {

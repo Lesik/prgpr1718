@@ -4,8 +4,6 @@
 #ifndef CABASE_H
 #define CABASE_H
 
-#include "snake.h"
-
 // Klasse CAbase wird definiert
 class CAbase
 {

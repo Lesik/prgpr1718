@@ -45,7 +45,7 @@ private:                    // Private Variablen
     QTimer *timer;
     QColor colour;
 
-    enum GameType { GameSnake, GameOfLife };
+    enum GameType { GameOfLife, GameSnake };
     GameType game;
     int currentGame;
     CAbase ca;              // CAbase aus vorherigen Aufgaben

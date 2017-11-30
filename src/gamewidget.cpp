@@ -157,8 +157,9 @@ void GameWidget::paintEvent(QPaintEvent *event)
     }
     if (currentGame == GameSnake) {
             // Paint Food
-            qreal left  = (qreal) (cellWidth * snake.getFoodCoordX());
-            qreal top   = (qreal) (cellHeight * snake.getFoodCoordY());
+            QPoint food = snake.getFood();
+            qreal left  = (qreal) (cellWidth * food.x());
+            qreal top   = (qreal) (cellHeight * food.y());
             QRectF r(left, top, cellWidth, cellHeight);
             painter.fillRect(r, Qt::red);
     }
@@ -214,6 +215,7 @@ void GameWidget::loadFromFile() {
 }
 
 void GameWidget::changeGame(int index) {
+    stopGame();
     switch (index) {
     case 0:
         currentGame = GameOfLife;
@@ -221,7 +223,7 @@ void GameWidget::changeGame(int index) {
         break;
     case 1:
         currentGame = GameSnake;
-        snake.PrepareFieldSnake();
+        snake.prepareFieldSnake();
         break;
     default:
         currentGame = GameOfLife;

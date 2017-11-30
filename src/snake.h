@@ -16,28 +16,17 @@ public:
 // Getter
     int getSize();
     int getCell(int x, int y);
-    int getFoodCoordX();
-    int getFoodCoordY();
+    QPoint getFood();
 
-    void PrepareFieldSnake();
+    void prepareFieldSnake();
     void generateFood();
 
     enum Direction { Stop, Up, Left, Down, Right };
     void setDirection(Direction direction);
-    Direction getDirection();
 
     void evolve();
-    void eatFood();
 
 private:
-    void onUp();
-    void onLeft();
-    void onDown();
-    void onRight();
-
-    void generateBody();
-
-    void collision();
     void gameOver();
 
     // 2-dim Array
@@ -45,9 +34,10 @@ private:
 
     QPoint head;
     QPoint tail;
-    int length; // snake length
     QPoint food;
     Direction headDirection;
+    void doHead();
+    void doTail();
 };
 
 #endif // SNAKE_H
