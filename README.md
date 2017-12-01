@@ -1,5 +1,3 @@
-Milestone 1
-
 === How to run ===
 Create a makefile by issuing
   $ qmake GameOfLife.pro
