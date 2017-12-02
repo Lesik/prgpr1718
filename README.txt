@@ -14,7 +14,7 @@ Alternatively, open the project in QtCreator and use its built-in build tools.
 There are no known issues. The program should work as expected.
 
 === Authors ===
-Kevin Tsang ():
+Kevin Tsang (5428328):
   - TBA
 
 Javier Andres Quintero Arenas (6038555):
