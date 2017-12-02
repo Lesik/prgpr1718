@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->gridLayout->addWidget(game);
     game->changeGame(0);
+    game->setTimerIntervall(500);
 }
 
 MainWindow::~MainWindow() {delete ui;}

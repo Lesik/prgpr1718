@@ -16,6 +16,7 @@ public:
 // Getter
     int getSize();
     int getCell(int x, int y);
+    bool getEnd ();
     QPoint getFood();
 
     void prepareFieldSnake();
@@ -27,8 +28,6 @@ public:
     void evolve();
 
 private:
-    void gameOver();
-
     // 2-dim Array
     int currentworld[SIZE][SIZE];
 
@@ -36,6 +35,7 @@ private:
     QPoint tail;
     QPoint food;
     Direction headDirection;
+    bool end;
     void doHead();
     void doTail();
 };

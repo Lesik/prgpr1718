@@ -52,6 +52,7 @@ private:                    // Private Variablen
     Snake snake;
     int getUniverseSize();
     int getCell(int x, int y);
+    void checkGameOver ();  // for Snake
 };
 
 #endif // GAMEWIDGET_H

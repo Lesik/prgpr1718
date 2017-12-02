@@ -42,7 +42,12 @@ void GameWidget::setUniverseSize(int size) {
 // Start, Stop und Clear Funktion
 void GameWidget::startGame() {timer->start();}
 void GameWidget::stopGame() {timer->stop();}
-void GameWidget::clear() {setUniverseSize(getUniverseSize());}
+void GameWidget::clear() {
+    switch (currentGame) {
+    case GameOfLife: setUniverseSize(getUniverseSize()); break;
+    case GameSnake: snake.prepareFieldSnake(); break;
+    }
+}
 
 void GameWidget::newGeneration() {
     switch (currentGame) {
@@ -51,6 +56,7 @@ void GameWidget::newGeneration() {
         break;
     case GameSnake:
         snake.evolve();
+        checkGameOver();
         break;
     }
     update();
@@ -257,4 +263,10 @@ void GameWidget::keyPressEvent(QKeyEvent *event) {
             newGeneration();
             break;
         }
+}
+
+void GameWidget::checkGameOver() {
+    if (snake.getEnd() == true) {
+        clear();
+    }
 }
