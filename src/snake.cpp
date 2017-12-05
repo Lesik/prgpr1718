@@ -37,13 +37,20 @@ void Snake::prepareFieldSnake() {
     currentworld[head.x()][head.y()] = 1;
     tail = head;
     generateFood();
+    //Ränder werden definiert
+    for (int i = 0; i < SIZE; i++) {
+        currentworld[0][i] = -1;
+        currentworld[i][0] = -1;
+        currentworld[i][SIZE-1] = -1;
+        currentworld[SIZE-1][i] = -1;
+    }
 }
 
 void Snake::generateFood() {
     do {
         // arithmetic exception
-        food.setX(rand() % SIZE);
-        food.setY(rand() % SIZE);
+        food.setX((rand() % (SIZE - 2)) + 1);
+        food.setY((rand() % (SIZE - 2)) + 1);
     } while (head == food);
 }
 
@@ -63,8 +70,10 @@ void Snake::setDirection(Direction direction) {
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
-    if (head.x() < 0 || head.x() > SIZE) end = true;
-    if (head.y() < 0 || head.y() > SIZE) end = true;
+    if (head.x() == 0 ) {headDirection = Stop; end = true; }
+    if (head.x() == SIZE) {headDirection = Stop; end = true; }
+    if (head.y() == 0) {headDirection = Stop; end = true; }
+    if (head.y() == SIZE) {headDirection = Stop; end = true; }
 
     doHead();
     doTail();

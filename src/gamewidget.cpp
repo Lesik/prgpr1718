@@ -152,13 +152,19 @@ void GameWidget::paintEvent(QPaintEvent *event)
     int universeSize = getUniverseSize();
     for (int x = 0; x < universeSize; x++) {
         for (int y = 0; y < universeSize; y++) {
-            if (getCell(x, y) != 0) {
-                // calculate left and top edges by calculating distance from top left edge
-                qreal left = (qreal) (cellWidth * x);
-                qreal top = (qreal) (cellHeight * y);
-                // the cell should be cellWidth wide and cellHeight tall
-                QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+            // calculate left and top edges by calculating distance from top left edge
+            qreal left = (qreal) (cellWidth * x);
+            qreal top = (qreal) (cellHeight * y);
+            // the cell should be cellWidth wide and cellHeight tall
+            QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
+
+            if (getCell(x, y) > 0) {
                 painter.fillRect(r, currentGame == GameSnake ? Qt::darkBlue : Qt::red);
+            }
+            if(currentGame == GameSnake) {
+                if (getCell(x, y) == -1) {
+                    painter.fillRect(r, Qt::darkGreen);
+                }
             }
         }
     }
