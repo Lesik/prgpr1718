@@ -1,3 +1,7 @@
+/*
+    Javi (6038555), Lesik (6082200), Kelvin Tsang (5428328)
+*/
+
 #ifndef SNAKE_H
 #define SNAKE_H
 
