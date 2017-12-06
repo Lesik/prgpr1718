@@ -51,7 +51,7 @@ void Snake::generateFood() {
         // arithmetic exception
         food.setX((rand() % (SIZE - 2)) + 1);
         food.setY((rand() % (SIZE - 2)) + 1);
-    } while (head == food);
+    } while (currentworld[food.x()][food.y()] != 0);
 }
 
 // Aufgabe 3b)
