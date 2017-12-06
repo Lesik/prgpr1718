@@ -161,6 +161,7 @@ void GameWidget::paintEvent(QPaintEvent *event)
             if (getCell(x, y) > 0) {
                 painter.fillRect(r, currentGame == GameSnake ? Qt::darkBlue : Qt::red);
             }
+            // paint border
             if(currentGame == GameSnake) {
                 if (getCell(x, y) == -1) {
                     painter.fillRect(r, Qt::darkGreen);
