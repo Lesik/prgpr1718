@@ -13,12 +13,12 @@ Alternatively, open the project in QtCreator and use its built-in build tools.
 === Issues ===
 There are no known issues. The program should work as expected.
 
-=== Authors ===
+=== Authors (Group 4) ===
 Kevin Tsang (5428328):
-  - TBA
+  - Array logic
 
 Javier Andres Quintero Arenas (6038555):
-  - TBA
+  - Head & tail rendering
 
 Oles Pidgornyy (6082200):
-  - TBA
+  - Qt interface
