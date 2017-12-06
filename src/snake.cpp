@@ -70,10 +70,24 @@ void Snake::setDirection(Direction direction) {
 // Aufgabe 1)
 void Snake::evolve() {
     // Aufgabe 1b)
-    if (head.x() == 0 ) {headDirection = Stop; end = true; }
-    if (head.x() == SIZE) {headDirection = Stop; end = true; }
-    if (head.y() == 0) {headDirection = Stop; end = true; }
-    if (head.y() == SIZE) {headDirection = Stop; end = true; }
+    /*
+    if (head.x() == 0 ) {
+        headDirection = Stop;
+        end = true;
+    }
+    if (head.x() == SIZE) {
+        headDirection = Stop;
+        end = true;
+    }
+    if (head.y() == 0) {
+        headDirection = Stop;
+        end = true;
+    }
+    if (head.y() == SIZE) {
+        headDirection = Stop;
+        end = true;
+    }
+    */
 
     doHead();
     doTail();
