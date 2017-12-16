@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->gridLayout->addWidget(game);
     game->changeGame(0);
+    game->changeMode(0);
     game->setTimerIntervall(500);
 }
 
@@ -26,5 +27,5 @@ void MainWindow::on_SpinBox_universe_size_valueChanged(int arg1) {game->setUnive
 void MainWindow::on_SpinBox_generation_intervall_valueChanged(int arg1) {game->setTimerIntervall(arg1);}
 void MainWindow::on_Button_save_clicked() {game->saveToFile();}
 void MainWindow::on_Button_load_clicked() {game->loadFromFile();}
-void MainWindow::on_ComboBox_universe_mode_activated(int index) { game->changeGame(index);
-}
+void MainWindow::on_ComboBox_universe_mode_activated(int index) { game->changeGame(index); }
+void MainWindow::on_ComboBox_cells_mode_activated(int index) { game->changeMode(index); }

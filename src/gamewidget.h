@@ -12,6 +12,7 @@
 
 #include "cabase.h"
 #include "snake.h"
+#include "predatorvictim.h"
 
 class GameWidget : public QWidget
 {
@@ -20,6 +21,7 @@ public:
     explicit GameWidget(QWidget *parent = nullptr);
     void paintUniverse();
     void changeGame(int index);
+    void changeMode(int index);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
@@ -45,11 +47,14 @@ private:                    // Private Variablen
     QTimer *timer;
     QColor colour;
 
-    enum GameType { GameOfLife, GameSnake };
+    enum GameType { GameOfLife, GameSnake, GamePredatorVictim };
+    enum GameMode { Predator, Victim, Food };
     GameType game;
     int currentGame;
+    int currentMode;
     CAbase ca;              // CAbase aus vorherigen Aufgaben
     Snake snake;
+    predatorvictim predvic;
     int getUniverseSize();
     int getCell(int x, int y);
     void checkGameOver ();  // for Snake

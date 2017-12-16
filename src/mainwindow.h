@@ -32,6 +32,8 @@ private slots:
 
     void on_ComboBox_universe_mode_activated(int index);
 
+    void on_ComboBox_cells_mode_activated(int index);
+
 private:
     Ui::MainWindow *ui;
 };

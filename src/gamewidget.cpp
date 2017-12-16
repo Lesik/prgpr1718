@@ -42,11 +42,14 @@ void GameWidget::setUniverseSize(int size) {
 // Start, Stop und Clear Funktion
 void GameWidget::startGame() {timer->start();}
 void GameWidget::stopGame() {timer->stop();}
-void GameWidget::clear() {
+void GameWidget::clear()
+{
     switch (currentGame) {
-    case GameOfLife: setUniverseSize(getUniverseSize()); break;
-    case GameSnake: snake.prepareFieldSnake(); break;
+    case GameOfLife:            setUniverseSize(getUniverseSize()); break;
+    case GameSnake:             snake.prepareFieldSnake(); break;
+    case GamePredatorVictim:    predvic.prepareField(); break;
     }
+    update();
 }
 
 void GameWidget::newGeneration() {
@@ -58,44 +61,81 @@ void GameWidget::newGeneration() {
         snake.evolve();
         checkGameOver();
         break;
+    case GamePredatorVictim:
+        predvic.evolve();
+        break;
     }
     update();
 }
 
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
-void GameWidget::mousePressEvent(QMouseEvent *event) {
+void GameWidget::mousePressEvent(QMouseEvent *event)
+{
+    // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
+    double cellGeometry = 580.00 / getUniverseSize();
+    // hier wird die Position des Mauszeigers abgefragt
+    int xPosition = event->x()/cellGeometry;
+    int yPosition = event->y()/cellGeometry;
+
     switch (currentGame) {
-        case GameOfLife: {
-            // 580 ist die Groeße die wir im mainwindow.ui festgelegt haben
-            double cellGeometry = 580.00 / getUniverseSize();
-            // hier wird die Position des Mauszeigers abgefragt
-            int xPosition = event->x()/cellGeometry;
-            int yPosition = event->y()/cellGeometry;
-            // je nach dem ob die lebendig war oder nicht wird sie invertiert
-            if (ca.getCell(xPosition, yPosition) == 0) {
-                ca.setCell(xPosition, yPosition, 1);
-            }
-            else ca.setCell(xPosition, yPosition, 0);
-            break;
+    case GameOfLife:
+        // je nach dem ob die lebendig war oder nicht wird sie invertiert
+        if (ca.getCell(xPosition, yPosition) == 0) {
+            ca.setCell(xPosition, yPosition, 1);
         }
-        case GameSnake: return; break;
+        else ca.setCell(xPosition, yPosition, 0);
+        break;
+    case GamePredatorVictim:
+        int value = 0;
+        switch (currentMode) {
+        case Predator:
+            value = 1;
+            break;
+        case Victim:
+            value = 2;
+            break;
+        case Food:
+            value = 3;
+            break;
+        default: break;
+        }
+        if (predvic.getCell(xPosition, yPosition) != value)
+            predvic.setCell(xPosition, yPosition, value);
+        if (predvic.getCell(xPosition, yPosition) == value)
+            predvic.setCell(xPosition, yPosition, value);
+        break;
     }
     update();
 }
 
 // wenn die Maustaste geklickt worden ist, soll die Funktion ausgeführt werden
-void GameWidget::mouseMoveEvent(QMouseEvent *event) {
+void GameWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    double cellGeometry = 580.00 / getUniverseSize();
+    int xPosition = event->x()/cellGeometry;
+    int yPosition = event->y()/cellGeometry;
+
     switch (currentGame) {
-        case GameOfLife: {
-            double cellGeometry = 580.00 / getUniverseSize();
-            int xPosition = event->x()/cellGeometry;
-            int yPosition = event->y()/cellGeometry;
-            if (ca.getCell(xPosition, yPosition) == 0) {
-               ca.setCell(xPosition, yPosition, 1);
-            }
+    case GameOfLife:
+        if (ca.getCell(xPosition, yPosition) == 0)
+           ca.setCell(xPosition, yPosition, 1);
+        break;
+    case GamePredatorVictim:
+        int value = 0;
+        switch (currentMode) {
+        case Predator:
+            value = 1;
+            break;
+        case Victim:
+            value = 2;
+            break;
+        case Food:
+            value = 3;
             break;
         }
-        case GameSnake: return; break;
+        if (predvic.getCell(xPosition, yPosition) != value)
+            predvic.setCell(xPosition, yPosition, value);
+        break;
     }
     update();
 }
@@ -123,6 +163,9 @@ int GameWidget::getUniverseSize() {
     case GameSnake:
         return snake.getSize();
         break;
+    case GamePredatorVictim:
+        return predvic.getSize();
+        break;
     }
     return 30;
 }
@@ -135,6 +178,8 @@ int GameWidget::getCell(int x, int y) {
     case GameSnake:
         return snake.getCell(x, y);
         break;
+    case GamePredatorVictim:
+        return predvic.getCell(x, y);
     }
     return 0;
 }
@@ -157,15 +202,22 @@ void GameWidget::paintEvent(QPaintEvent *event)
             qreal top = (qreal) (cellHeight * y);
             // the cell should be cellWidth wide and cellHeight tall
             QRectF r(left, top, (qreal) cellWidth, (qreal) cellHeight);
-
-            if (getCell(x, y) > 0) {
-                painter.fillRect(r, currentGame == GameSnake ? Qt::darkBlue : Qt::red);
-            }
-            // paint border
-            if(currentGame == GameSnake) {
-                if (getCell(x, y) == -1) {
-                    painter.fillRect(r, Qt::darkGreen);
-                }
+            switch (currentGame) {
+            case GameOfLife:
+                if (getCell(x, y) > 0) painter.fillRect(r, Qt::red);
+                break;
+            case GameSnake:
+                if (getCell(x, y) > 0) painter.fillRect(r, Qt::darkBlue);
+                // paint Border
+                if (getCell(x, y) == -1) painter.fillRect(r, Qt::darkGreen);
+                break;
+            case GamePredatorVictim:
+                if (getCell(x, y) == 1) painter.fillRect(r, Qt::darkMagenta);
+                if (getCell(x, y) == 2) painter.fillRect(r, Qt::yellow);
+                if (getCell(x, y) == 3) painter.fillRect(r, Qt::green);
+                break;
+            default:
+                break;
             }
         }
     }
@@ -239,12 +291,29 @@ void GameWidget::changeGame(int index) {
         currentGame = GameSnake;
         snake.prepareFieldSnake();
         break;
+    case 2:
+        currentGame = GamePredatorVictim;
+        predvic.prepareField();
+        break;
     default:
         currentGame = GameOfLife;
         break;
     }
-    //ca.changeGame(index);
     update();
+}
+
+void GameWidget::changeMode(int index) {
+    switch (index) {
+    case 0:
+        currentMode = Predator;
+        break;
+    case 1:
+        currentMode = Victim;
+        break;
+    case 2:
+        currentMode = Food;
+        break;
+    }
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {
