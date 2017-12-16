@@ -111,6 +111,8 @@ void predatorvictim::moveDirection2currentStatus()
                 xPos++;
                 yPos++;
                 break;
+            default:
+                break;
             }
             nextgenStatus[xPos][yPos] = currentStatus[x][y];
         }
@@ -144,54 +146,56 @@ void predatorvictim::generateRandomWolrd()
 
 void predatorvictim::randomMove(int x, int y)
 {
-    int xPos = x;
-    int yPos = y;
-    int var = 0;
+    if (currentStatus[x][y] == 1 || currentStatus[x][y] == 2) {
+        int xPos = x;
+        int yPos = y;
+        int var = 0;
 
-    switch (rand() % 8) {
-    case 0:
-        xPos--;
-        yPos--;
-        var = 1;
-        break;
-    case 1:
-        xPos--;
-        var = 2;
-        break;
-    case 2:
-        xPos--;
-        yPos++;
-        var = 3;
-        break;
-    case 3:
-        yPos--;
-        var = 4;
-        break;
-    case 4:
-        yPos++;
-        var = 6;
-        break;
-    case 5:
-        xPos++;
-        yPos--;
-        var = 7;
-        break;
-    case 6:
-        xPos++;
-        var = 8;
-        break;
-    case 7:
-        xPos++;
-        yPos++;
-        var = 9;
-        break;
-    }
-    if (xPos >= 0 && yPos >= 0) {
-        if (xPos < ws && y < ws) {
-            if (legalityCheck(xPos, yPos) == true) {
-                moveDirection[x][y] = var;
+        switch (rand() % 8) {
+        case 0:
+            xPos--;
+            yPos--;
+            var = 1;
+            break;
+        case 1:
+            xPos--;
+            var = 2;
+            break;
+        case 2:
+            xPos--;
+            yPos++;
+            var = 3;
+            break;
+        case 3:
+            yPos--;
+            var = 4;
+            break;
+        case 4:
+            yPos++;
+            var = 6;
+            break;
+        case 5:
+            xPos++;
+            yPos--;
+            var = 7;
+            break;
+        case 6:
+            xPos++;
+            var = 8;
+            break;
+        case 7:
+            xPos++;
+            yPos++;
+            var = 9;
+            break;
+        }
+        if (xPos >= 0 && yPos >= 0) {
+            if (xPos < ws && y < ws) {
+                if (legalityCheck(xPos, yPos) == true) {
+                    moveDirection[x][y] = var;
+                }
+                else moveDirection[x][y] = 0;
             }
-            else moveDirection[x][y] = 0;
         }
     }
 }
