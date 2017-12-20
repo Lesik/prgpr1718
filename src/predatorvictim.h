@@ -14,12 +14,13 @@ public:
     void setCell(int x, int y, int value);      // value:   1 = Predator
     int getCell(int x, int y);                  //          2 = Victim
 private:                                        //          3 = Food
-    void cellEvolutionDirection(int x, int y);
+    enum Status { Dead, Predator, Victim, Food };
+    void cellEvolutionDirection(QPoint point);
     void generateRandomWolrd();
-    void randomMove(int x, int y);
-    void eatNeighbor(int x, int y, int value);
-    int neighbor(int x, int y, int value);
-    bool legalityCheck(int x, int y);           //  1 | 2 | 3
+    void randomMove(QPoint point);
+    void eatNeighbor(QPoint point, Status status);
+    int neighbor(QPoint point, Status status);
+    bool legalityCheck(QPoint point);           //  1 | 2 | 3
                                                 //  3 | x | 5
                                                 //  5 | 6 | 8
     int lifeInterval;
@@ -33,6 +34,7 @@ private:                                        //          3 = Food
     int** currentStatus;
     int** nextgenStatus;
     int** moveDirection;
+    QPoint getPointByInt(QPoint point, int direction);
 };
 
 #endif // PREDATORVICTIM_H

@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <QRectF>
 
 #include "predatorvictim.h"
 
@@ -38,12 +39,16 @@ void predatorvictim::worldEvolutionLifePredator()
 {
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
-            cellEvolutionDirection(x, y);
+            QPoint point(x, y);
+            //cellEvolutionDirection(point);
+            randomMove(point);
         }
     }
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
-            cellEvolutionDirection(x, y);
+            QPoint point(x, y);
+            //cellEvolutionMove(point);
+            randomMove(point);
         }
     }
     for (int x = 0; x < ws; x++) {
@@ -90,20 +95,20 @@ int predatorvictim::getCell(int x, int y)
     return 0;
 }
 
-void predatorvictim::cellEvolutionDirection(int x, int y)
+void predatorvictim::cellEvolutionDirection(QPoint point)
 {
-    if (currentStatus[x][y] == 1) {
-        if (neighbor(x, y, 2) > 0) {
-            eatNeighbor(x, y, 1);
+    if (currentStatus[point.x()][point.y()] == Predator) {
+        if (neighbor(point, Victim) > 0) {
+            eatNeighbor(point, Predator);
         }
-        else randomMove(x, y);
+        else randomMove(point);
     }
-    if (currentStatus[x][y] == 2) {
-        if (neighbor(x, y, 1) != 0) {
-            if (neighbor(x, y, 3) > 0) {
-                eatNeighbor(x, y, 2);
+    if (currentStatus[point.x()][point.y()] == Victim) {
+        if (neighbor(point, Predator) != 0) {
+            if (neighbor(point, Food) > 0) {
+                eatNeighbor(point, Victim);
             }
-            else randomMove(x, y);
+            else randomMove(point);
         }
     }
 }
@@ -128,17 +133,89 @@ void predatorvictim::generateRandomWolrd()
     } while (counter < sum);
 }
 
-int predatorvictim::neighbor(int x, int y, int value)
+int predatorvictim::neighbor(QPoint point, Status status)
 {
     return 0;
 }
 
-void predatorvictim::eatNeighbor(int x, int y, int value)
+void predatorvictim::eatNeighbor(QPoint point, Status status)
 {
     return;
 }
 
-void predatorvictim::randomMove(int x, int y)
+void predatorvictim::randomMove(QPoint point)
 {
-    return;
+    if (currentStatus[point.x()][point.y()] == Predator || currentStatus[point.x()][point.y()] == Victim) {
+        QPoint newpoint = getPointByInt(point, (rand() % 8) + 1);
+        if ((0 <= newpoint.x() && newpoint.x() < ws) && (0 <= newpoint.y() && newpoint.y() < ws)) {
+            if (legalityCheck(newpoint)) { // TODO
+                moveDirection[newpoint.x()][newpoint.y()];
+            }
+        }
+    }
+}
+
+QPoint predatorvictim::getPointByInt(QPoint point, int direction) {
+    switch (direction) {
+    case 1:
+        point.rx()--;
+        point.ry()--;
+        break;
+    case 2:
+        point.rx()--;
+        break;
+    case 3:
+        point.rx()--;
+        point.ry()++;
+        break;
+    case 4:
+        point.ry()--;
+        break;
+    case 5:
+        point.ry()++;
+        break;
+    case 6:
+        point.rx()++;
+        point.ry()--;
+        break;
+    case 7:
+        point.rx()++;
+        break;
+    case 8:
+        point.rx()++;
+        point.ry()++;
+        break;
+    }
+    return point;
+}
+
+bool predatorvictim::legalityCheck(QPoint point)
+{
+    int x = point.x();
+    int y = point.y();
+    if (x > 0) {
+        if (y > 0) {
+            if(moveDirection[x - 1][y - 1] == 9)    return false;
+        }
+        if(moveDirection[x - 1][y] == 8)            return false;
+        if (y < ws - 1) {
+            if(moveDirection[x - 1][y + 1] == 7)    return false;
+        }
+    }
+    if (y > 0) {
+        if(moveDirection[x][y - 1] == 6)            return false;
+    }
+    if (y < ws - 1) {
+            if(moveDirection[x][y + 1] == 4)        return false;
+    }
+    if (x < ws - 1) {
+        if (y > 0) {
+            if(moveDirection[x + 1][y - 1] == 3)    return false;
+        }
+        if(moveDirection[x + 1][y] == 2)            return false;
+        if (y < ws - 1) {
+            if(moveDirection[x + 1][y + 1] == 1)    return false;
+        }
+    }
+    return true;
 }
