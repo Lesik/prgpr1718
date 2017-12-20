@@ -62,7 +62,7 @@ void GameWidget::newGeneration() {
         checkGameOver();
         break;
     case GamePredatorVictim:
-        predvic.evolve();
+        //predvic.cellEvolutionDirection();
         break;
     }
     update();
@@ -78,14 +78,15 @@ void GameWidget::mousePressEvent(QMouseEvent *event)
     int yPosition = event->y()/cellGeometry;
 
     switch (currentGame) {
-    case GameOfLife:
+    case GameOfLife: {
         // je nach dem ob die lebendig war oder nicht wird sie invertiert
         if (ca.getCell(xPosition, yPosition) == 0) {
             ca.setCell(xPosition, yPosition, 1);
         }
         else ca.setCell(xPosition, yPosition, 0);
         break;
-    case GamePredatorVictim:
+    }
+    case GamePredatorVictim: {
         int value = 0;
         switch (currentMode) {
         case Predator:
@@ -99,10 +100,12 @@ void GameWidget::mousePressEvent(QMouseEvent *event)
             break;
         default: break;
         }
-        if (predvic.getCell(xPosition, yPosition) != value)
-            predvic.setCell(xPosition, yPosition, value);
         if (predvic.getCell(xPosition, yPosition) == value)
-            predvic.setCell(xPosition, yPosition, value);
+            predvic.setCell(xPosition, yPosition, 0);
+        else predvic.setCell(xPosition, yPosition, value);
+        break;
+    }
+    default:
         break;
     }
     update();
@@ -314,6 +317,11 @@ void GameWidget::changeMode(int index) {
         currentMode = Food;
         break;
     }
+}
+
+void GameWidget::changeLifeInterval(int interval)
+{
+    predvic.setLifeInterval(interval);
 }
 
 void GameWidget::keyPressEvent(QKeyEvent *event) {

@@ -34,6 +34,8 @@ private slots:
 
     void on_ComboBox_cells_mode_activated(int index);
 
+    void on_spinBox_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 };

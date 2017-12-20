@@ -22,6 +22,7 @@ public:
     void paintUniverse();
     void changeGame(int index);
     void changeMode(int index);
+    void changeLifeInterval(int interval);
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

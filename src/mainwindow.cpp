@@ -29,3 +29,4 @@ void MainWindow::on_Button_save_clicked() {game->saveToFile();}
 void MainWindow::on_Button_load_clicked() {game->loadFromFile();}
 void MainWindow::on_ComboBox_universe_mode_activated(int index) { game->changeGame(index); }
 void MainWindow::on_ComboBox_cells_mode_activated(int index) { game->changeMode(index); }
+void MainWindow::on_spinBox_valueChanged(int interval) { game->changeLifeInterval(interval); }
