@@ -62,7 +62,7 @@ void GameWidget::newGeneration() {
         checkGameOver();
         break;
     case GamePredatorVictim:
-        //predvic.cellEvolutionDirection();
+        predvic.worldEvolutionLifePredator();
         break;
     }
     update();

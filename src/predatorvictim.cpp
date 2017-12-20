@@ -6,7 +6,7 @@
 predatorvictim::predatorvictim()
 {
     lifeInterval    = 50;
-    ws              = 30;
+    ws              = 10;
 
 }
 
@@ -32,7 +32,7 @@ void predatorvictim::prepareField()
             moveDirection[i][j] = 0;
         }
     }
-    generateRandomWolrd();
+    generateRandomWorld();
 }
 
 void predatorvictim::worldEvolutionLifePredator()
@@ -40,15 +40,8 @@ void predatorvictim::worldEvolutionLifePredator()
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
             QPoint point(x, y);
-            //cellEvolutionDirection(point);
             randomMove(point);
-        }
-    }
-    for (int x = 0; x < ws; x++) {
-        for (int y = 0; y < ws; y++) {
-            QPoint point(x, y);
-            //cellEvolutionMove(point);
-            randomMove(point);
+            cellEvolutionDirection(point);
         }
     }
     for (int x = 0; x < ws; x++) {
@@ -97,6 +90,9 @@ int predatorvictim::getCell(int x, int y)
 
 void predatorvictim::cellEvolutionDirection(QPoint point)
 {
+    QPoint newpoint = getPointByInt(point, moveDirection[point.x()][point.y()]);
+    nextgenStatus[newpoint.x()][newpoint.y()] = currentStatus[point.x()][point.y()];
+    return;
     if (currentStatus[point.x()][point.y()] == Predator) {
         if (neighbor(point, Victim) > 0) {
             eatNeighbor(point, Predator);
@@ -111,13 +107,15 @@ void predatorvictim::cellEvolutionDirection(QPoint point)
             else randomMove(point);
         }
     }
+    if (currentStatus[point.x()][point.y()] == Predator || currentStatus[point.x()][point.y()] == Victim)
+        currentLife[point.x()][point.y()]--;
 }
 
-void predatorvictim::generateRandomWolrd()
+void predatorvictim::generateRandomWorld()
 {
-    int predator = 10;
-    int victim = 20;
-    int food = 30;
+    int predator = 2;
+    int victim = 5;
+    int food = 10;
     int sum = predator + victim + food;
     int counter = 0;
 
@@ -146,12 +144,12 @@ void predatorvictim::eatNeighbor(QPoint point, Status status)
 void predatorvictim::randomMove(QPoint point)
 {
     if (currentStatus[point.x()][point.y()] == Predator || currentStatus[point.x()][point.y()] == Victim) {
-        QPoint newpoint = getPointByInt(point, (rand() % 8) + 1);
-        if ((0 <= newpoint.x() && newpoint.x() < ws) && (0 <= newpoint.y() && newpoint.y() < ws)) {
-            if (legalityCheck(newpoint)) { // TODO
-                moveDirection[newpoint.x()][newpoint.y()];
-            }
-        }
+        int direction = (rand() % 8) + 1;
+        QPoint newpoint = getPointByInt(point, direction);
+        bool check = legalityCheck(newpoint);
+        int it = 6;
+        if (legalityCheck(newpoint))   // TODO
+            moveDirection[newpoint.x()][newpoint.y()] = direction;
     }
 }
 
@@ -162,24 +160,24 @@ QPoint predatorvictim::getPointByInt(QPoint point, int direction) {
         point.ry()--;
         break;
     case 2:
-        point.rx()--;
+        point.ry()--;
         break;
     case 3:
+        point.rx()++;
+        point.ry()--;
+        break;
+    case 4:
+        point.rx()--;
+        break;
+    case 5:
+        point.rx()++;
+        break;
+    case 6:
         point.rx()--;
         point.ry()++;
         break;
-    case 4:
-        point.ry()--;
-        break;
-    case 5:
-        point.ry()++;
-        break;
-    case 6:
-        point.rx()++;
-        point.ry()--;
-        break;
     case 7:
-        point.rx()++;
+        point.ry()++;
         break;
     case 8:
         point.rx()++;
@@ -191,6 +189,8 @@ QPoint predatorvictim::getPointByInt(QPoint point, int direction) {
 
 bool predatorvictim::legalityCheck(QPoint point)
 {
+    // TODO CHECK FOR -1 COORDINATES, OTHERWISE OUTOFBOUNDS
+    if ((0 <= point.x() && point.x() < ws) && (0 <= point.y() && point.y() < ws)) return false;
     int x = point.x();
     int y = point.y();
     if (x > 0) {

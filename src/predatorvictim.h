@@ -16,7 +16,7 @@ public:
 private:                                        //          3 = Food
     enum Status { Dead, Predator, Victim, Food };
     void cellEvolutionDirection(QPoint point);
-    void generateRandomWolrd();
+    void generateRandomWorld();
     void randomMove(QPoint point);
     void eatNeighbor(QPoint point, Status status);
     int neighbor(QPoint point, Status status);
