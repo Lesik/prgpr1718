@@ -58,7 +58,7 @@ void predatorvictim::worldEvolutionLifePredator()
                 continue;
 
             // don't move if you are hase and have the wolfs around you
-            if (me == Victim && !existsWolfAroundMe(point))
+            if (me == Victim && neighbor(point, Predator))
                 moveDirection[point.x()][point.y()] = 5;
 
             if (me == Predator || me == Victim) {
@@ -200,20 +200,9 @@ void predatorvictim::generateRandomWorld()
     } while (counter < sum);
 }
 
-
-bool predatorvictim::existsWolfAroundMe(QPoint point)
-{
-    // no 5 because no need to check if we are wolf ourselves
-    for (int i : { 1, 2, 3, 4, 6, 7, 8, 9 }) {
-        QPoint possiblewolf = getPointByInt(point, i);
-        if (outOfBoundsCheck(possiblewolf)) continue;
-        if (currentStatus[possiblewolf.x()][possiblewolf.y()] == Predator) return true;
-    }
-    return false;
-}
-
 int predatorvictim::neighbor(QPoint point, Status status)
 {
+    // no 5 because no need to check if we are it ourselves
     for (int i : { 1, 2, 3, 4, 6, 7, 8, 9 }) {
         QPoint searchForNeightbor = getPointByInt(point, i);
         // return false if check outside of boundary

@@ -35,7 +35,6 @@ private:                                        //          3 = Food
     Status** currentStatus;
     Status** nextgenStatus;
     int** moveDirection;
-    bool existsWolfAroundMe(QPoint point);
     QPoint getPointByInt(QPoint point, int direction);
     bool outOfBoundsCheck(QPoint point);
 };
