@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <QRectF>
+#include <string.h>
 
 #include "predatorvictim.h"
 
@@ -14,21 +15,21 @@ void predatorvictim::prepareField()
 {
     currentLife     = new int*[ws];
     nextgenLife     = new int*[ws];
-    currentStatus   = new int*[ws];
-    nextgenStatus   = new int*[ws];
+    currentStatus   = new Status*[ws];
+    nextgenStatus   = new Status*[ws];
     moveDirection   = new int*[ws];
 
     for (int i = 0; i < ws; i++) {
         currentLife[i]  = new int[ws];
         nextgenLife[i]  = new int[ws];
-        currentStatus[i]= new int[ws];
-        nextgenStatus[i]= new int[ws];
+        currentStatus[i]= new Status[ws];
+        nextgenStatus[i]= new Status[ws];
         moveDirection[i]= new int[ws];
         for (int j = 0; j < ws; j++) {
             currentLife[i][j]   = 0;
             nextgenLife[i][j]   = 0;
-            currentStatus[i][j] = 0;
-            nextgenStatus[i][j] = 0;
+            currentStatus[i][j] = Dead;
+            nextgenStatus[i][j] = Dead;
             moveDirection[i][j] = 0;
         }
     }
@@ -37,17 +38,79 @@ void predatorvictim::prepareField()
 
 void predatorvictim::worldEvolutionLifePredator()
 {
+    // clear previous directions
+    //memset(moveDirection, 0, sizeof(moveDirection[0][0]) * ws * ws);
+
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
             QPoint point(x, y);
-            randomMove(point);
-            cellEvolutionDirection(point);
+            Status me = currentStatus[point.x()][point.y()];
+            int life = currentLife[point.x()][point.y()];
+
+            // don't do anything if we are food
+            if (me == Dead || me == Food)
+                continue;
+
+            // life is empty, is dead
+            if (life == 1)
+                continue;
+
+            // don't move if you are hase and have the wolfs around you
+            if (me == Victim && !existsWolfAroundMe(point))
+                moveDirection[point.x()][point.y()] = 5;
+
+            if (me == Predator || me == Victim) {
+                // who is searching for what? I am so confused. but the following line clears it up
+                int direction = neighbor(point, me == Predator ? Victim : Food);
+                // if we didn't find a direction with neighbor(), let rand() decide
+                if (!direction) {
+                    do {
+                        direction = (rand() % 9) + 1;
+                    } while (direction == 5 || !legalityCheck(getPointByInt(point, direction)));
+                }
+                moveDirection[point.x()][point.y()] = direction;
+            }
         }
     }
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
+            QPoint point(x, y);
+            Status me = currentStatus[point.x()][point.y()];
+
+            // don't do anything if we are food
+            if (me == Dead)
+                continue;
+
+            if (me == Food)
+                nextgenStatus[point.x()][point.y()] = me;
+
+            int life = currentLife[point.x()][point.y()];
+            if (life - 1 == 0) {
+                nextgenStatus[point.x()][point.y()] == Dead;
+                continue;
+            }
+
+            QPoint placeWhereIWillMove = getPointByInt(point, moveDirection[point.x()][point.y()]);
+            Status whatIsThereWhereIWIllMove = currentStatus[placeWhereIWillMove.x()][placeWhereIWillMove.y()];
+
+
+            // copy old life health points into new life minus one
+            nextgenLife[placeWhereIWillMove.x()][placeWhereIWillMove.y()] = currentLife[point.x()][point.y()] - 1;
+
+            if ((me == Predator && whatIsThereWhereIWIllMove == Victim) || (me == Victim && whatIsThereWhereIWIllMove == Food)) {
+                nextgenLife[placeWhereIWillMove.x()][placeWhereIWillMove.y()] = maxlife;
+            }
+
+            // move
+            nextgenStatus[placeWhereIWillMove.x()][placeWhereIWillMove.y()] = me;
+
+        }
+    }
+
+    for (int x = 0; x < ws; x++) {
+        for (int y = 0; y < ws; y++) {
             currentStatus[x][y] = nextgenStatus[x][y];
-            nextgenStatus[x][y] = 0;
+            nextgenStatus[x][y] = Dead;
             currentLife[x][y] = nextgenLife[x][y];
             nextgenLife[x][y] = 0;
             moveDirection[x][y] = 0;
@@ -77,14 +140,14 @@ void predatorvictim::setCell(int x, int y, int value)
 {
     if (x >= 0 && y >= 0)
         if (x < ws && y < ws)
-            currentStatus[x][y] = value;
+            currentStatus[x][y] = (Status) value;
 }
 
 int predatorvictim::getCell(int x, int y)
 {
     if (x >= 0 && y >= 0)
         if (x < ws && y < ws)
-            return currentStatus[x][y];
+            return (int) currentStatus[x][y];
     return 0;
 }
 
@@ -123,22 +186,36 @@ void predatorvictim::generateRandomWorld()
         int x = rand() % ws;
         int y = rand() % ws;
         if (currentStatus[x][y] == 0) {
-            if (counter < food) currentStatus[x][y] = 3;
-            if (counter >= food && counter < food + victim) currentStatus[x][y] = 2;
-            if (counter >= food + victim) currentStatus[x][y] = 1;
+            if (counter < food) currentStatus[x][y] = Food;
+            if (counter >= food && counter < food + victim) currentStatus[x][y] = Victim;
+            if (counter >= food + victim) currentStatus[x][y] = Predator;
+            if (currentStatus[x][y] == Predator || currentStatus[x][y] == Victim) currentLife[x][y] = maxlife;
             counter++;
         }
     } while (counter < sum);
 }
 
-int predatorvictim::neighbor(QPoint point, Status status)
+
+bool predatorvictim::existsWolfAroundMe(QPoint point)
 {
-    return 0;
+    // no 5 because no need to check if we are wolf ourselves
+    for (int i : { 1, 2, 3, 4, 6, 7, 8, 9 }) {
+        QPoint possiblewolf = getPointByInt(point, i);
+        if (outOfBoundsCheck(possiblewolf)) continue;
+        if (currentStatus[possiblewolf.x()][possiblewolf.y()] == Predator) return true;
+    }
+    return false;
 }
 
-void predatorvictim::eatNeighbor(QPoint point, Status status)
+int predatorvictim::neighbor(QPoint point, Status status)
 {
-    return;
+    for (int i : { 1, 2, 3, 4, 6, 7, 8, 9 }) {
+        QPoint searchForNeightbor = getPointByInt(point, i);
+        // return false if check outside of boundary
+        if (outOfBoundsCheck(searchForNeightbor)) continue;
+        if (currentStatus[searchForNeightbor.x()][searchForNeightbor.y()] == status) return i;
+    }
+    return false;
 }
 
 void predatorvictim::randomMove(QPoint point)
@@ -149,7 +226,7 @@ void predatorvictim::randomMove(QPoint point)
         bool check = legalityCheck(newpoint);
         int it = 6;
         if (legalityCheck(newpoint))   // TODO
-            moveDirection[newpoint.x()][newpoint.y()] = direction;
+            moveDirection[point.x()][point.y()] = direction;
     }
 }
 
@@ -170,16 +247,18 @@ QPoint predatorvictim::getPointByInt(QPoint point, int direction) {
         point.rx()--;
         break;
     case 5:
-        point.rx()++;
         break;
     case 6:
+        point.rx()++;
+        break;
+    case 7:
         point.rx()--;
         point.ry()++;
         break;
-    case 7:
+    case 8:
         point.ry()++;
         break;
-    case 8:
+    case 9:
         point.rx()++;
         point.ry()++;
         break;
@@ -187,12 +266,21 @@ QPoint predatorvictim::getPointByInt(QPoint point, int direction) {
     return point;
 }
 
+/*
+ * return true if out of bounce
+ * and false if point is OK
+ */
+bool predatorvictim::outOfBoundsCheck(QPoint point) {
+    return (point.x() < 0 || point.x() >= ws || point.y() < 0 || point.y() >= ws);
+}
+
 bool predatorvictim::legalityCheck(QPoint point)
 {
-    // TODO CHECK FOR -1 COORDINATES, OTHERWISE OUTOFBOUNDS
-    if ((0 <= point.x() && point.x() < ws) && (0 <= point.y() && point.y() < ws)) return false;
+    // if out of bounds, legality is wounds
+    if (outOfBoundsCheck(point)) return false;
     int x = point.x();
     int y = point.y();
+    // other legality checks by kelvin
     if (x > 0) {
         if (y > 0) {
             if(moveDirection[x - 1][y - 1] == 9)    return false;
@@ -206,7 +294,7 @@ bool predatorvictim::legalityCheck(QPoint point)
         if(moveDirection[x][y - 1] == 6)            return false;
     }
     if (y < ws - 1) {
-            if(moveDirection[x][y + 1] == 4)        return false;
+        if(moveDirection[x][y + 1] == 4)        return false;
     }
     if (x < ws - 1) {
         if (y > 0) {

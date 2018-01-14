@@ -21,20 +21,23 @@ private:                                        //          3 = Food
     void eatNeighbor(QPoint point, Status status);
     int neighbor(QPoint point, Status status);
     bool legalityCheck(QPoint point);           //  1 | 2 | 3
-                                                //  3 | x | 5
-                                                //  5 | 6 | 8
+                                                //  4 | 5 | 6
+                                                //  7 | 8 | 9
     int lifeInterval;
 
     int currentNeighbor[8];
     int numberNeighbor;
 
+    int maxlife = 20;
     int ws; // Worldsize
     int** currentLife;
     int** nextgenLife;
-    int** currentStatus;
-    int** nextgenStatus;
+    Status** currentStatus;
+    Status** nextgenStatus;
     int** moveDirection;
+    bool existsWolfAroundMe(QPoint point);
     QPoint getPointByInt(QPoint point, int direction);
+    bool outOfBoundsCheck(QPoint point);
 };
 
 #endif // PREDATORVICTIM_H
