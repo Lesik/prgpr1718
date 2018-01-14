@@ -43,6 +43,8 @@ void predatorvictim::worldEvolutionLifePredator()
 
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
+            // hier ist CellEvolutionDirection
+
             QPoint point(x, y);
             Status me = currentStatus[point.x()][point.y()];
             int life = currentLife[point.x()][point.y()];
@@ -74,6 +76,8 @@ void predatorvictim::worldEvolutionLifePredator()
     }
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
+            // hier ist CellEvolutionMove
+
             QPoint point(x, y);
             Status me = currentStatus[point.x()][point.y()];
 
@@ -109,6 +113,7 @@ void predatorvictim::worldEvolutionLifePredator()
 
     for (int x = 0; x < ws; x++) {
         for (int y = 0; y < ws; y++) {
+            // Kopiere den neuen Status in das aktuelle Universum / Spielfeld
             currentStatus[x][y] = nextgenStatus[x][y];
             nextgenStatus[x][y] = Dead;
             currentLife[x][y] = nextgenLife[x][y];
