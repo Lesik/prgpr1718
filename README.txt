@@ -18,7 +18,7 @@ Kevin Tsang (5428328):
   - Array logic
 
 Javier Andres Quintero Arenas (6038555):
-  - Head & tail rendering
+  - Algorithm
 
 Oles Pidgornyy (6082200):
   - Qt interface
