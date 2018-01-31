@@ -1,5 +1,6 @@
 === Overview ===
-Did you ever want to have an application in which you can play **Snake** and simulate both **Game of Life** and **Predator-Victim**? Us neither, but we had to write it anyway to pass the PRG-PR practical programming course at university.
+Did you ever want to have an application in which you can play Snake and simulate both Game of Life and Predator-Victim?
+Us neither, but we had to write it anyway to pass the PRG-PR practical programming course at university.
 
 === How to compile and run ===
 Create a makefile by issuing
